@@ -1,6 +1,4 @@
-import { CheckRounded } from "@mui/icons-material";
-import { ReducerWithoutAction } from "react";
-import { Exercise, Session } from "..";
+import { ExerciseStatus, Session } from "./exercise";
 
 export enum SessionActionKind {
   ADD_EXERCISE = "add-exercise",
@@ -17,13 +15,20 @@ export const sessionsReducer = (state: Session[], action: SessionAction) => {
   const { type, payload } = action;
   switch (type) {
     case SessionActionKind.ADD_EXERCISE: {
-      const { exercise, sessionNumber } = payload;
+      const { name, currentWeightKg, reps, sessionNumber } = payload;
 
+      const exerciseToAdd = {
+        status: ExerciseStatus.INCOMPLETE,
+        name,
+        currentWeightKg,
+        reps,
+        definedOrder: state[sessionNumber].exercises.length,
+      };
       const newState: Session[] = state.map((session, index) => {
         if (index === sessionNumber) {
           return {
             ...state[index],
-            exercises: [...state[index].exercises, exercise],
+            exercises: [...state[index].exercises, exerciseToAdd],
           };
         } else return session;
       });
@@ -46,24 +51,36 @@ export const sessionsReducer = (state: Session[], action: SessionAction) => {
     case SessionActionKind.COMPLETE_EXERCISE: {
       const { exerciseNumber, sessionNumber, status } = payload;
 
-      console.log(exerciseNumber, sessionNumber);
       const newState: Session[] = state.map((session, sessionIndex) => {
         if (sessionIndex === sessionNumber) {
           return {
             ...state[sessionIndex],
-            exercises: state[sessionIndex].exercises.map((exercise, index) => {
-              if (index === exerciseNumber) {
-                return {
-                  ...exercise,
-                  status,
-                };
-              } else return exercise;
-            }),
+            exercises: state[sessionIndex].exercises
+              .map((exercise, index) => {
+                if (index === exerciseNumber) {
+                  return {
+                    ...exercise,
+                    status,
+                  };
+                } else return exercise;
+              })
+              .sort((a, b) => {
+                if (
+                  a.status == b.status ||
+                  (a.status != ExerciseStatus.INCOMPLETE &&
+                    b.status != ExerciseStatus.INCOMPLETE)
+                ) {
+                  return a.definedOrder - b.definedOrder; // High
+                } else if (a.status == ExerciseStatus.INCOMPLETE) {
+                  return -1;
+                } else {
+                  return 1;
+                }
+              }),
           };
         } else return session;
       });
       localStorage.setItem("sessions", JSON.stringify(newState));
-
       return newState;
     }
     default:

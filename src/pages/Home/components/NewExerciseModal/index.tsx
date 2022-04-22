@@ -11,7 +11,7 @@ import { useState } from "react";
 import { SessionAction, SessionActionKind } from "../../store/sessionReducer";
 import { ModalBox } from "../../../../styles/ModalBox";
 import { StyledButton } from "../../../../styles/StyledButton";
-import { ExerciseStatus } from "../..";
+import { ExerciseStatus } from "../../store/exercise";
 
 interface ExerciseModalDTO {
   open: boolean;
@@ -35,12 +35,9 @@ const NewExerciseModal = (props: ExerciseModalDTO) => {
       dispatcher({
         type: SessionActionKind.ADD_EXERCISE,
         payload: {
-          exercise: {
-            name: exerciseName,
-            currentWeightKg: exerciseWeight,
-            reps: exerciseReps,
-            status: ExerciseStatus.INCOMPLETE,
-          },
+          name: exerciseName,
+          currentWeightKg: exerciseWeight,
+          reps: exerciseReps,
           sessionNumber,
         },
       });

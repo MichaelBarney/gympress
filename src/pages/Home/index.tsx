@@ -11,26 +11,7 @@ import NewSessionModal from "./components/NewSessionModal";
 import ExerciseList from "./components/ExerciseList";
 import { colors } from "../../theme";
 import { StyledButton } from "../../styles/StyledButton";
-
-export enum ExerciseStatus {
-  INCOMPLETE = "incomplete",
-  INCREASED = "increased",
-  DECREASED = "decreased",
-  MAINTAINED = "maintained",
-}
-
-export interface Exercise {
-  name: string;
-  description?: string;
-  currentWeightKg: number;
-  reps: number;
-  status: ExerciseStatus;
-}
-
-export interface Session {
-  exercises: Exercise[];
-  name?: string;
-}
+import { Session } from "./store/exercise";
 
 const Home = () => {
   const loadedDay: number = parseInt(localStorage.getItem("day") || "0");
@@ -71,7 +52,11 @@ const Home = () => {
           {ALPHABET.slice(0, sessions.length).map(
             (letter: string, index: number) => {
               if (index === sessionNumber) {
-                return <b style={{ color: colors.green }}>{letter}</b>;
+                return (
+                  <b style={{ color: colors.green }} key={index}>
+                    {letter}
+                  </b>
+                );
               } else {
                 return letter + " |";
               }
