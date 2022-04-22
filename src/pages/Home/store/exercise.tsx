@@ -11,7 +11,6 @@ export interface Exercise {
   currentWeightKg: number;
   reps: number;
   status: ExerciseStatus;
-  definedOrder: number;
 }
 
 export interface Session {

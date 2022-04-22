@@ -22,7 +22,6 @@ export const sessionsReducer = (state: Session[], action: SessionAction) => {
         name,
         currentWeightKg,
         reps,
-        definedOrder: state[sessionNumber].exercises.length,
       };
       const newState: Session[] = state.map((session, index) => {
         if (index === sessionNumber) {
@@ -55,28 +54,14 @@ export const sessionsReducer = (state: Session[], action: SessionAction) => {
         if (sessionIndex === sessionNumber) {
           return {
             ...state[sessionIndex],
-            exercises: state[sessionIndex].exercises
-              .map((exercise, index) => {
-                if (index === exerciseNumber) {
-                  return {
-                    ...exercise,
-                    status,
-                  };
-                } else return exercise;
-              })
-              .sort((a, b) => {
-                if (
-                  a.status == b.status ||
-                  (a.status != ExerciseStatus.INCOMPLETE &&
-                    b.status != ExerciseStatus.INCOMPLETE)
-                ) {
-                  return a.definedOrder - b.definedOrder; // High
-                } else if (a.status == ExerciseStatus.INCOMPLETE) {
-                  return -1;
-                } else {
-                  return 1;
-                }
-              }),
+            exercises: state[sessionIndex].exercises.map((exercise, index) => {
+              if (index === exerciseNumber) {
+                return {
+                  ...exercise,
+                  status,
+                };
+              } else return exercise;
+            }),
           };
         } else return session;
       });

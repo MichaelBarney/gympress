@@ -13,14 +13,14 @@ import { ModalBox } from "../../../../styles/ModalBox";
 import { StyledButton } from "../../../../styles/StyledButton";
 import { ExerciseStatus } from "../../store/exercise";
 
-interface ExerciseModalDTO {
+interface EditExerciseModalProps {
   open: boolean;
   onClose(): any;
   dispatcher: React.Dispatch<SessionAction>;
   sessionNumber: number;
 }
 
-const NewExerciseModal = (props: ExerciseModalDTO) => {
+const EditExerciseModal = (props: EditExerciseModalProps) => {
   const { sessionNumber, onClose, open, dispatcher } = props;
 
   const [exerciseName, setExerciseName] = useState<string>();
@@ -115,7 +115,7 @@ const NewExerciseModal = (props: ExerciseModalDTO) => {
             style={{ width: "100%", marginTop: 16 }}
             color="secondary"
           >
-            Add
+            Done!
           </StyledButton>
         </form>
       </ModalBox>
@@ -123,4 +123,4 @@ const NewExerciseModal = (props: ExerciseModalDTO) => {
   );
 };
 
-export default NewExerciseModal;
+export default EditExerciseModal;
