@@ -1,8 +1,17 @@
-import { Typography } from "@mui/material";
-import { Component, createRef, RefObject } from "react";
-import { Exercise } from "../../store/exercise";
+import { Typography, TextField, InputAdornment } from "@mui/material";
+import {
+  Component,
+  createRef,
+  RefObject,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
+import { Exercise, ExerciseStatus } from "../../store/exercise";
 import { StyledExercise } from "./style";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+import { StyledButton } from "../../../../styles/StyledButton";
 
 interface ExerciseItemProps {
   exercise: Exercise;
@@ -10,68 +19,100 @@ interface ExerciseItemProps {
   onClick(): any;
 }
 
-class ExerciseItem extends Component<ExerciseItemProps> {
-  divRef: RefObject<HTMLDivElement>;
+const ExerciseItem = (props: ExerciseItemProps) => {
+  const [expanded, setExpanded] = useState(false);
+  const divRef = useRef<HTMLDivElement>(null);
+  const { exercise, onClick } = props;
 
-  constructor(props: ExerciseItemProps) {
-    super(props);
-    this.divRef = createRef();
-  }
+  // Animate exercise completion
+  const oldY = useRef<number>();
+  useEffect(() => {
+    const el = divRef.current;
+    if (el && oldY.current) {
+      const newOffset = el.getBoundingClientRect().top;
+      const changeInY = oldY.current - newOffset;
+      console.log(changeInY);
 
-  getSnapshotBeforeUpdate(prevProps: ExerciseItemProps) {
-    console.log("Before Update");
-    if (prevProps.viewOrder !== this.props.viewOrder) {
-      if (this.divRef?.current) {
-        return this.divRef.current.getBoundingClientRect().top;
-      }
-    }
-    return null;
-  }
+      if (changeInY) {
+        requestAnimationFrame(() => {
+          el.style.transition = "";
+          el.style.transform = `translateY(${changeInY}px)`;
 
-  componentDidUpdate(
-    prevProps: ExerciseItemProps,
-    prevState: any,
-    snapshot: number
-  ) {
-    console.log("DBG NOW: ", this.props);
-    console.log("DBG BEFORE: ", prevProps);
-    if (prevProps.viewOrder !== this.props.viewOrder && snapshot) {
-      console.log("Changed Order");
-      if (this.divRef?.current) {
-        let el = this.divRef.current;
-        console.log("EL: ", el);
-        let newOffset = el.getBoundingClientRect().top;
-        let invert = snapshot - newOffset;
-        console.log("INVERT: ", invert);
-        el.classList.remove("animate-on-transforms");
-        el.style.transform = `translateY(${invert}px)`;
-
-        requestAnimationFrame(function () {
-          el.classList.add("animate-on-transforms");
-          el.style.transform = "";
+          requestAnimationFrame(() => {
+            el.style.transition = "transform 500ms ease";
+            el.style.transform = "";
+          });
         });
       }
     }
-  }
+    oldY.current = el?.getBoundingClientRect().top;
+  }, [exercise]);
 
-  render() {
-    const { exercise, onClick } = this.props;
-    return (
-      <StyledExercise
-        onClick={onClick}
-        status={exercise.status}
-        ref={this.divRef}
-        data-reactid={exercise.name}
+  return (
+    <StyledExercise
+      onClick={() => {
+        if (exercise.status == ExerciseStatus.INCOMPLETE) {
+          setExpanded(!expanded);
+        } else {
+          onClick();
+        }
+      }}
+      status={exercise.status}
+      ref={divRef}
+    >
+      <Typography
+        variant="h5"
+        style={{
+          display: "inline",
+        }}
       >
-        <Typography
-          variant="h5"
-          style={{
-            display: "inline",
-          }}
-        >
-          {exercise.name}
-        </Typography>
+        {exercise.name}
+      </Typography>
 
+      {expanded && (
+        <div style={{ marginTop: 24 }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              columnGap: 8,
+            }}
+          >
+            <TextField
+              label="Weight"
+              variant="outlined"
+              value={exercise.currentWeightKg}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">kg</InputAdornment>
+                ),
+              }}
+              required
+              type="number"
+              style={{ width: "50%" }}
+            />
+            <TextField
+              label="Reps"
+              variant="outlined"
+              required
+              type="number"
+              style={{ width: "50%" }}
+              value={exercise.reps}
+            />
+          </div>
+          <StyledButton
+            type="submit"
+            style={{ width: "100%", marginBottom: 8, marginTop: 16 }}
+            color="secondary"
+            onClick={onClick}
+          >
+            Done!
+          </StyledButton>
+        </div>
+      )}
+
+      {!expanded && (
         <Typography
           variant="subtitle1"
           style={{
@@ -80,7 +121,9 @@ class ExerciseItem extends Component<ExerciseItemProps> {
         >
           {exercise.currentWeightKg}kg | {exercise.reps}x
         </Typography>
+      )}
 
+      {!expanded && (
         <RadioButtonUncheckedIcon
           style={{
             position: "absolute",
@@ -91,9 +134,9 @@ class ExerciseItem extends Component<ExerciseItemProps> {
             fontSize: 32,
           }}
         />
-      </StyledExercise>
-    );
-  }
-}
+      )}
+    </StyledExercise>
+  );
+};
 
 export default ExerciseItem;

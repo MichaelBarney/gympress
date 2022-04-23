@@ -38,16 +38,16 @@ const Home = () => {
   if (currentSession)
     return (
       <div>
-        <Typography
-          component="h1"
-          style={{ fontWeight: 600, fontSize: 40, marginTop: 24 }}
-        >
+        <Typography variant="subtitle1" style={{ marginTop: 24 }}>
+          Today's Session:
+        </Typography>
+        <Typography variant="h4" style={{ fontWeight: 600 }}>
           {currentSession?.name}
         </Typography>
 
         <Typography
           component="p"
-          style={{ fontSize: 16, color: colors.lightBlack }}
+          style={{ fontSize: 16, color: colors.lightBlack, marginBottom: 32 }}
         >
           {ALPHABET.slice(0, sessions.length).map(
             (letter: string, index: number) => {

@@ -10,7 +10,8 @@ export const StyledButton = styled(Button)`
   color: ${colors.green};
 
   :hover {
-    border: 4px solid ${colors.darkGreen};
+    border-color: ${colors.darkGreen};
     color: ${colors.darkGreen};
+    background-color: ${colors.black};
   }
 `;

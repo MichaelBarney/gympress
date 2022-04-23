@@ -12,7 +12,7 @@ export const StyledExercise = styled.div.attrs(
   opacity: ${(props) => (props.status == ExerciseStatus.INCOMPLETE ? 1 : 0.5)};
 
   user-select: none;
-  transition: opacity ease 0.2s;
+  transition: opacity ease 500ms;
 
   :hover {
     cursor: pointer;

@@ -38,6 +38,7 @@ const ExerciseList = (props: ExerciseListProps) => {
             key={exercise.name}
             viewOrder={index}
             onClick={() => {
+              console.log("Complete");
               dispatcher({
                 type: SessionActionKind.COMPLETE_EXERCISE,
                 payload: {
