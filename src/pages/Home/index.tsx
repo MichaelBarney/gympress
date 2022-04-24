@@ -41,7 +41,7 @@ const Home = () => {
   useEffect(() => {
     console.log("SET CURRENT SESSION ", sessionNumber);
     setCurrentSession(sessions[sessionNumber]);
-  }, [sessionNumber, sessions.length]);
+  }, [sessionNumber, sessions]);
 
   return (
     <div>

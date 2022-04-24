@@ -52,8 +52,10 @@ const NewSessionModal = (props: ExerciseModalDTO) => {
             onChange={(e) => {
               setSessionName(e.target.value);
             }}
-            color="secondary"
           />
+          <Typography style={{ fontSize: 12, marginTop: 0, opacity: 0.75 }}>
+            Ex: Leg Day
+          </Typography>
           <StyledButton type="submit" fullWidth style={{ marginTop: 16 }}>
             Create Session
           </StyledButton>

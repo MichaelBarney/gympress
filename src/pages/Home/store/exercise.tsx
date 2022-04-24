@@ -11,6 +11,7 @@ export interface Exercise {
   currentWeightKg: number;
   reps: number;
   status: ExerciseStatus;
+  originalIndex?: number;
 }
 
 export interface Session {
