@@ -16,7 +16,7 @@ interface ExerciseModalDTO {
   open: boolean;
   onClose(): any;
   dispatcher: React.Dispatch<SessionAction>;
-  day: number;
+  onAdded(): any;
 }
 
 const NewSessionModal = (props: ExerciseModalDTO) => {
@@ -33,6 +33,7 @@ const NewSessionModal = (props: ExerciseModalDTO) => {
         },
       });
       props.onClose();
+      props.onAdded();
     }
   };
 

@@ -1,4 +1,10 @@
-import { Button, Typography } from "@mui/material";
+import {
+  Button,
+  Divider,
+  MenuItem,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useReducer } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -12,12 +18,13 @@ import ExerciseList from "./components/ExerciseList";
 import { colors } from "../../theme";
 import { StyledButton } from "../../styles/StyledButton";
 import { Session } from "./store/exercise";
+import styled from "styled-components";
+import { SessionTitle } from "./style";
 
 const Home = () => {
-  const loadedDay: number = parseInt(localStorage.getItem("day") || "0");
   const loadedSessionsString = localStorage.getItem("sessions");
+  const loadedCurrentSession = localStorage.getItem("currentSession");
 
-  const [day, setDay] = useState<number>(loadedDay);
   const [exerciseModalOpen, setExerciseModalOpen] = useState<boolean>(false);
   const [sessionModalOpen, setSessionModalOpen] = useState<boolean>(false);
 
@@ -27,83 +34,93 @@ const Home = () => {
   );
 
   const [currentSession, setCurrentSession] = useState<Session>();
-  const [sessionNumber, setSessionNumber] = useState<number>(0);
+  const [sessionNumber, setSessionNumber] = useState<number>(
+    loadedCurrentSession ? parseInt(loadedCurrentSession) : 0
+  );
 
   useEffect(() => {
-    const calculatedSessionNumber = day % sessions.length;
-    setSessionNumber(calculatedSessionNumber);
-    setCurrentSession(sessions[calculatedSessionNumber]);
-  }, [day, sessions]);
+    console.log("SET CURRENT SESSION ", sessionNumber);
+    setCurrentSession(sessions[sessionNumber]);
+  }, [sessionNumber, sessions.length]);
 
-  if (currentSession)
-    return (
-      <div>
-        <Typography variant="subtitle1" style={{ marginTop: 24 }}>
-          Today's Session:
-        </Typography>
-        <Typography variant="h4" style={{ fontWeight: 600 }}>
-          {currentSession?.name}
-        </Typography>
-
-        <Typography
-          component="p"
-          style={{ fontSize: 16, color: colors.lightBlack, marginBottom: 32 }}
-        >
-          {ALPHABET.slice(0, sessions.length).map(
-            (letter: string, index: number) => {
-              if (index === sessionNumber) {
-                return (
-                  <b style={{ color: colors.green }} key={index}>
-                    {letter}
-                  </b>
-                );
+  return (
+    <div>
+      {currentSession && (
+        <>
+          <SessionTitle
+            label="Today's Session:"
+            variant="standard"
+            onChange={(e) => {
+              if (e.target.value == "new") {
+                setSessionModalOpen(true);
               } else {
-                return letter + " |";
+                setSessionNumber(parseInt(e.target.value));
               }
-            }
-          )}
-        </Typography>
-
-        <ExerciseList
-          currentSession={currentSession}
-          sessionNumber={day % sessions.length}
-          dispatcher={dispatchSessions}
-        />
-
-        <StyledButton
-          fullWidth
-          onClick={() => {
-            setExerciseModalOpen(true);
-          }}
-          style={{ marginTop: 16 }}
-        >
-          <AddIcon
-            style={{
-              fontSize: 32,
-              position: "absolute",
-              left: 16,
             }}
+            select
+            fullWidth
+            value={sessionNumber}
+          >
+            {sessions.map((session, index) => (
+              <MenuItem key={index} value={index}>
+                {session.name}
+              </MenuItem>
+            ))}
+            <MenuItem key={"new"} value={"new"}>
+              <AddIcon />
+              &nbsp; New Session
+            </MenuItem>
+          </SessionTitle>
+
+          <Typography
+            style={{ fontSize: 16, color: colors.lightBlack, marginBottom: 32 }}
+          >
+            {ALPHABET.slice(0, sessions.length).map(
+              (letter: string, index: number) => {
+                if (index === sessionNumber) {
+                  return (
+                    <>
+                      {index != 0 && " | "}
+                      <b style={{ color: colors.green }} key={index}>
+                        {letter}
+                      </b>
+                    </>
+                  );
+                } else {
+                  return index == 0 ? letter : " | " + letter;
+                }
+              }
+            )}
+          </Typography>
+
+          <ExerciseList
+            currentSession={currentSession}
+            sessionNumber={sessionNumber}
+            dispatcher={dispatchSessions}
           />
-          New Exercise
-        </StyledButton>
 
-        <NewExerciseModal
-          onClose={() => {
-            setExerciseModalOpen(false);
-          }}
-          open={exerciseModalOpen}
-          dispatcher={dispatchSessions}
-          sessionNumber={day % sessions.length}
-        />
-      </div>
-    );
-  else
-    return (
-      <div>
-        <Typography variant="h4" style={{ marginTop: 32 }}>
-          <b>You don't have any sessions yet...</b>
-        </Typography>
+          <hr style={{ marginTop: 16, opacity: 0.25 }} />
 
+          <StyledButton
+            fullWidth
+            onClick={() => {
+              setExerciseModalOpen(true);
+            }}
+            style={{ marginTop: 8, marginBottom: 32 }}
+          >
+            <AddIcon
+              style={{
+                fontSize: 32,
+                position: "absolute",
+                left: 16,
+              }}
+            />
+            New Exercise
+          </StyledButton>
+        </>
+      )}
+
+      {sessions.length == 0 && (
         <StyledButton
           fullWidth
           onClick={() => {
@@ -120,17 +137,34 @@ const Home = () => {
           />
           Add Session
         </StyledButton>
+      )}
 
+      {exerciseModalOpen && (
+        <NewExerciseModal
+          onClose={() => {
+            setExerciseModalOpen(false);
+          }}
+          open={exerciseModalOpen}
+          dispatcher={dispatchSessions}
+          currentSessionNumber={sessionNumber}
+          sessions={sessions}
+        />
+      )}
+
+      {sessionModalOpen && (
         <NewSessionModal
           onClose={() => {
             setSessionModalOpen(false);
           }}
           open={sessionModalOpen}
           dispatcher={dispatchSessions}
-          day={day}
+          onAdded={() => {
+            console.log("Added: ", sessions.length);
+            setSessionNumber(sessions.length);
+          }}
         />
-      </div>
-    );
+      )}
+    </div>
+  );
 };
-
 export default Home;

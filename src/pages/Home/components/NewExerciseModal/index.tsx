@@ -5,28 +5,42 @@ import {
   TextField,
   Typography,
   Box,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SessionAction, SessionActionKind } from "../../store/sessionReducer";
 import { ModalBox } from "../../../../styles/ModalBox";
 import { StyledButton } from "../../../../styles/StyledButton";
-import { ExerciseStatus } from "../../store/exercise";
+import { ExerciseStatus, Session } from "../../store/exercise";
 
 interface ExerciseModalDTO {
   open: boolean;
   onClose(): any;
   dispatcher: React.Dispatch<SessionAction>;
-  sessionNumber: number;
+  currentSessionNumber: number;
+  sessions: Session[];
 }
 
 const NewExerciseModal = (props: ExerciseModalDTO) => {
-  const { sessionNumber, onClose, open, dispatcher } = props;
+  const { currentSessionNumber, onClose, open, dispatcher, sessions } = props;
 
   const [exerciseName, setExerciseName] = useState<string>();
   const [exerciseDescription, setExerciseDescription] = useState<string>();
   const [exerciseWeight, setExerciseWeight] = useState<number>();
   const [exerciseReps, setExerciseReps] = useState<number>();
+  const [sessionNumber, setSessionNumber] =
+    useState<number>(currentSessionNumber);
+
+  useEffect(() => {
+    return () => {
+      console.log("Did Unmount");
+    };
+  }, []);
+  console.log(exerciseName);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,14 +62,23 @@ const NewExerciseModal = (props: ExerciseModalDTO) => {
 
   return (
     <Modal open={open} onClose={onClose}>
-      <ModalBox>
+      <ModalBox
+        style={{
+          position: "absolute",
+          top: 0,
+          bottom: 0,
+          maxHeight: "90vh",
+          margin: "auto",
+          height: "fit-content",
+        }}
+      >
         <Typography variant="h6" component="h2" style={{ marginBottom: 16 }}>
           New Exercise
         </Typography>
 
         <form noValidate autoComplete="off" onSubmit={handleSubmit}>
           <TextField
-            label="Name"
+            label="Exercise Name"
             variant="outlined"
             fullWidth
             onChange={(e) => {

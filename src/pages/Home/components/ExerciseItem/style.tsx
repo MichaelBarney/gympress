@@ -8,7 +8,7 @@ export const StyledExercise = styled.div.attrs(
   padding: 8px 16px;
   border-radius: 12px;
   position: relative;
-  margin-top: 16px;
+  margin-bottom: 16px;
   opacity: ${(props) => (props.status == ExerciseStatus.INCOMPLETE ? 1 : 0.5)};
 
   user-select: none;

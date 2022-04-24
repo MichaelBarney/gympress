@@ -1,28 +1,31 @@
 import { Typography, TextField, InputAdornment } from "@mui/material";
-import {
-  Component,
-  createRef,
-  RefObject,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useRef, useState } from "react";
 import { Exercise, ExerciseStatus } from "../../store/exercise";
 import { StyledExercise } from "./style";
-import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+
 import { StyledButton } from "../../../../styles/StyledButton";
+
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
+import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
+import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
+
+import { colors } from "../../../../theme";
 
 interface ExerciseItemProps {
   exercise: Exercise;
   viewOrder: number;
-  onClick(): any;
+  expanded: boolean;
+  expand(): any;
+  complete(newWeight: number, reps: number): any;
 }
 
 const ExerciseItem = (props: ExerciseItemProps) => {
-  const [expanded, setExpanded] = useState(false);
   const divRef = useRef<HTMLDivElement>(null);
-  const { exercise, onClick } = props;
+  const { exercise, expand, expanded, viewOrder, complete } = props;
+
+  const [weight, setWeight] = useState(exercise.currentWeightKg);
+  const [reps, setReps] = useState(exercise.reps);
 
   // Animate exercise completion
   const oldY = useRef<number>();
@@ -46,15 +49,13 @@ const ExerciseItem = (props: ExerciseItemProps) => {
       }
     }
     oldY.current = el?.getBoundingClientRect().top;
-  }, [exercise]);
+  }, [viewOrder]);
 
   return (
     <StyledExercise
       onClick={() => {
         if (exercise.status == ExerciseStatus.INCOMPLETE) {
-          setExpanded(!expanded);
-        } else {
-          onClick();
+          expand();
         }
       }}
       status={exercise.status}
@@ -82,7 +83,7 @@ const ExerciseItem = (props: ExerciseItemProps) => {
             <TextField
               label="Weight"
               variant="outlined"
-              value={exercise.currentWeightKg}
+              defaultValue={weight}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">kg</InputAdornment>
@@ -91,6 +92,9 @@ const ExerciseItem = (props: ExerciseItemProps) => {
               required
               type="number"
               style={{ width: "50%" }}
+              onChange={(e) => {
+                setWeight(parseInt(e.target.value));
+              }}
             />
             <TextField
               label="Reps"
@@ -98,14 +102,19 @@ const ExerciseItem = (props: ExerciseItemProps) => {
               required
               type="number"
               style={{ width: "50%" }}
-              value={exercise.reps}
+              defaultValue={reps}
+              onChange={(e) => {
+                setReps(parseInt(e.target.value));
+              }}
             />
           </div>
           <StyledButton
             type="submit"
             style={{ width: "100%", marginBottom: 8, marginTop: 16 }}
             color="secondary"
-            onClick={onClick}
+            onClick={() => {
+              complete(weight, reps);
+            }}
           >
             Done!
           </StyledButton>
@@ -123,8 +132,49 @@ const ExerciseItem = (props: ExerciseItemProps) => {
         </Typography>
       )}
 
-      {!expanded && (
+      {exercise.status == ExerciseStatus.INCOMPLETE && !expanded && (
         <RadioButtonUncheckedIcon
+          style={{
+            position: "absolute",
+            top: 0,
+            bottom: 0,
+            right: 16,
+            margin: "auto",
+            fontSize: 32,
+          }}
+        />
+      )}
+
+      {exercise.status == ExerciseStatus.INCREASED && !expanded && (
+        <ArrowCircleUpIcon
+          style={{
+            position: "absolute",
+            top: 0,
+            bottom: 0,
+            right: 16,
+            margin: "auto",
+            fontSize: 32,
+            color: colors.lightGreen,
+          }}
+        />
+      )}
+
+      {exercise.status == ExerciseStatus.DECREASED && !expanded && (
+        <ArrowCircleDownIcon
+          style={{
+            position: "absolute",
+            top: 0,
+            bottom: 0,
+            right: 16,
+            margin: "auto",
+            fontSize: 32,
+            color: colors.lightRed,
+          }}
+        />
+      )}
+
+      {exercise.status == ExerciseStatus.MAINTAINED && !expanded && (
+        <RadioButtonCheckedIcon
           style={{
             position: "absolute",
             top: 0,

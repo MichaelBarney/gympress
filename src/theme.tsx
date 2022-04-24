@@ -9,6 +9,8 @@ export const colors = {
   darkGreen: "#85AC34",
 
   white: "#FFFFFF",
+
+  lightRed: "#E35F42",
 };
 
 export const theme = createTheme({

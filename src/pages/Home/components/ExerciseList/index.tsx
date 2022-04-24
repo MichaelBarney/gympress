@@ -1,16 +1,17 @@
 import { Exercise, ExerciseStatus, Session } from "../../store/exercise";
 import { SessionAction, SessionActionKind } from "../../store/sessionReducer";
 import { StyledList } from "./style";
-import { Component, ReactChild } from "react";
+import { Component, Dispatch, ReactChild, useEffect, useState } from "react";
 import ExerciseItem from "../ExerciseItem";
 
 interface ExerciseListProps {
-  currentSession: Session | undefined;
-  dispatcher: React.Dispatch<SessionAction>;
+  currentSession: Session | null;
+  dispatcher: Dispatch<SessionAction>;
   sessionNumber: number;
 }
 const ExerciseList = (props: ExerciseListProps) => {
   const { currentSession, sessionNumber, dispatcher } = props;
+  const [expandedExercise, setExpandedExercise] = useState<number | null>(null);
 
   const exercisesView = currentSession?.exercises
     .map((exercise, index) => {
@@ -29,6 +30,15 @@ const ExerciseList = (props: ExerciseListProps) => {
       }
     });
 
+  useEffect(() => {
+    setExpandedExercise(getFirstIncompleteExercise(currentSession?.exercises));
+  }, [currentSession?.exercises]);
+
+  // useEffect(() => {
+  //   clearSession(sessionNumber, dispatcher);
+  //   localStorage.clear();
+  // }, []);
+
   return (
     <StyledList>
       {exercisesView?.map((exercise, index) => {
@@ -37,17 +47,18 @@ const ExerciseList = (props: ExerciseListProps) => {
             exercise={exercise}
             key={exercise.name}
             viewOrder={index}
-            onClick={() => {
-              console.log("Complete");
+            expanded={expandedExercise == exercise.originalIndex}
+            expand={() => {
+              setExpandedExercise(exercise.originalIndex);
+            }}
+            complete={(weight, reps) => {
               dispatcher({
                 type: SessionActionKind.COMPLETE_EXERCISE,
                 payload: {
                   exerciseNumber: exercise.originalIndex,
                   sessionNumber,
-                  status:
-                    exercise.status == ExerciseStatus.INCOMPLETE
-                      ? ExerciseStatus.INCREASED
-                      : ExerciseStatus.INCOMPLETE,
+                  newWeight: weight,
+                  newReps: reps,
                 },
               });
             }}
@@ -56,6 +67,31 @@ const ExerciseList = (props: ExerciseListProps) => {
       })}
     </StyledList>
   );
+};
+
+const getFirstIncompleteExercise = (
+  exercises: Exercise[] | undefined
+): number | null => {
+  if (!exercises) return null;
+
+  for (const [index, exercise] of exercises.entries()) {
+    if (exercise.status == ExerciseStatus.INCOMPLETE) {
+      return index;
+    }
+  }
+  return null;
+};
+
+const clearSession = (
+  sessionNumber: number,
+  dispatcher: Dispatch<SessionAction>
+) => {
+  dispatcher({
+    type: SessionActionKind.CLEAR_SESSION,
+    payload: {
+      sessionNumber,
+    },
+  });
 };
 
 export default ExerciseList;
