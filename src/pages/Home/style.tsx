@@ -18,4 +18,10 @@ export const SessionTitle = styled(TextField)`
   & .MuiInput-underline:before {
     border: none;
   }
+  & .MuiInput-underline:hover:before {
+    border: none;
+  }
+  & .MuiInput-underline:after {
+    border: none;
+  }
 `;

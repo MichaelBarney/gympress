@@ -52,7 +52,13 @@ export const sessionsReducer = (state: Session[], action: SessionAction) => {
       return newState;
     }
     case SessionActionKind.COMPLETE_EXERCISE: {
-      const { exerciseNumber, sessionNumber, newWeight, newReps } = payload;
+      const {
+        exerciseNumber,
+        sessionNumber,
+        newWeight,
+        newReps,
+        newDifficulty,
+      } = payload;
 
       const newState: Session[] = state.map((session, sessionIndex) => {
         if (sessionIndex === sessionNumber) {
@@ -64,6 +70,7 @@ export const sessionsReducer = (state: Session[], action: SessionAction) => {
                   ...exercise,
                   weight: newWeight,
                   reps: newReps,
+                  difficulty: newDifficulty,
                   status:
                     newWeight > exercise.currentWeightKg
                       ? ExerciseStatus.INCREASED

@@ -56,7 +56,13 @@ const NewSessionModal = (props: ExerciseModalDTO) => {
           <Typography style={{ fontSize: 12, marginTop: 0, opacity: 0.75 }}>
             Ex: Leg Day
           </Typography>
-          <StyledButton type="submit" fullWidth style={{ marginTop: 16 }}>
+          <StyledButton
+            type="submit"
+            fullWidth
+            style={{ marginTop: 16 }}
+            variant="contained"
+            color="secondary"
+          >
             Create Session
           </StyledButton>
         </form>

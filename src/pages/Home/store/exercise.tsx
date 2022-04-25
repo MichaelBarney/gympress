@@ -12,6 +12,7 @@ export interface Exercise {
   reps: number;
   status: ExerciseStatus;
   originalIndex?: number;
+  difficulty?: number;
 }
 
 export interface Session {

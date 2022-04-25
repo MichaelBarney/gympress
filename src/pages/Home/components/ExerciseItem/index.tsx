@@ -1,4 +1,10 @@
-import { Typography, TextField, InputAdornment } from "@mui/material";
+import {
+  Typography,
+  TextField,
+  InputAdornment,
+  ToggleButtonGroup,
+  ToggleButton,
+} from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { Exercise, ExerciseStatus } from "../../store/exercise";
 import { StyledExercise } from "./style";
@@ -11,13 +17,14 @@ import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
 
 import { colors } from "../../../../theme";
+import { fontSize } from "@mui/system";
 
 interface ExerciseItemProps {
   exercise: Exercise;
   viewOrder: number;
   expanded: boolean;
   expand(): any;
-  complete(newWeight: number, reps: number): any;
+  complete(newWeight: number, reps: number, difficulty: number): any;
 }
 
 const ExerciseItem = (props: ExerciseItemProps) => {
@@ -26,6 +33,7 @@ const ExerciseItem = (props: ExerciseItemProps) => {
 
   const [weight, setWeight] = useState(exercise.currentWeightKg);
   const [reps, setReps] = useState(exercise.reps);
+  const [difficulty, setDifficulty] = useState(exercise.difficulty);
 
   // Animate exercise completion
   const oldY = useRef<number>();
@@ -78,6 +86,7 @@ const ExerciseItem = (props: ExerciseItemProps) => {
               flexDirection: "row",
               justifyContent: "space-between",
               columnGap: 8,
+              marginBottom: 16,
             }}
           >
             <TextField
@@ -108,13 +117,45 @@ const ExerciseItem = (props: ExerciseItemProps) => {
               }}
             />
           </div>
+          <Typography align="center" style={{ marginBottom: 4 }}>
+            Difficulty
+          </Typography>
+          <ToggleButtonGroup
+            value={difficulty}
+            exclusive
+            onChange={(e, newDifficulty) => {
+              setDifficulty(newDifficulty);
+            }}
+            fullWidth
+            color="secondary"
+          >
+            <ToggleButton value={1} style={{ padding: "4px 0px" }}>
+              1
+            </ToggleButton>
+            <ToggleButton value={2} style={{ padding: "4px 0px" }}>
+              2
+            </ToggleButton>
+            <ToggleButton value={3} style={{ padding: "4px 0px" }}>
+              3
+            </ToggleButton>
+            <ToggleButton value={4} style={{ padding: "4px 0px" }}>
+              4
+            </ToggleButton>
+            <ToggleButton value={5} style={{ padding: "4px 0px" }}>
+              5
+            </ToggleButton>
+          </ToggleButtonGroup>
+
           <StyledButton
             type="submit"
-            style={{ width: "100%", marginBottom: 8, marginTop: 16 }}
+            style={{ width: "100%", marginBottom: 8, marginTop: 24 }}
             color="secondary"
             onClick={() => {
-              complete(weight, reps);
+              if (difficulty && weight && reps) {
+                complete(weight, reps, difficulty);
+              }
             }}
+            variant="contained"
           >
             Done!
           </StyledButton>

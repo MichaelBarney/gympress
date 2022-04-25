@@ -107,6 +107,8 @@ const Home = () => {
               setExerciseModalOpen(true);
             }}
             style={{ marginTop: 8, marginBottom: 32 }}
+            variant="outlined"
+            color="secondary"
           >
             <AddIcon
               style={{
@@ -127,6 +129,8 @@ const Home = () => {
             setSessionModalOpen(true);
           }}
           style={{ marginTop: 16 }}
+          variant="outlined"
+          color="secondary"
         >
           <AddIcon
             style={{

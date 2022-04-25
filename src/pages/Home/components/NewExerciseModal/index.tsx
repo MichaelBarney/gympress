@@ -137,6 +137,7 @@ const NewExerciseModal = (props: ExerciseModalDTO) => {
             type="submit"
             style={{ width: "100%", marginTop: 16 }}
             color="secondary"
+            variant="contained"
           >
             Add
           </StyledButton>
