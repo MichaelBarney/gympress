@@ -12,12 +12,11 @@ import { StyledExercise } from "./style";
 import { StyledButton } from "../../../../styles/StyledButton";
 
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
-import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
 
 import { colors } from "../../../../theme";
-import { fontSize } from "@mui/system";
 
 interface ExerciseItemProps {
   exercise: Exercise;
@@ -215,7 +214,7 @@ const ExerciseItem = (props: ExerciseItemProps) => {
       )}
 
       {exercise.status == ExerciseStatus.MAINTAINED && !expanded && (
-        <RadioButtonCheckedIcon
+        <CheckCircleOutlineIcon
           style={{
             position: "absolute",
             top: 0,
