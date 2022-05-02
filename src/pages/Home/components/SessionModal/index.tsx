@@ -32,32 +32,39 @@ interface ExerciseModalDTO {
 
 const SessionModal = (props: ExerciseModalDTO) => {
   const [sessionName, setSessionName] = useState<string>();
-  const handleSubmit = (e: React.FormEvent) => {
+
+  const handleAdd = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (sessionName) {
-      if (props.state == SESSION_MODAL_STATE.NEW) {
-        props.dispatcher({
-          type: SessionActionKind.ADD_SESSION,
-          payload: {
-            sessionName,
-            sessionToEdit: props.sessionToEdit,
-          },
-        });
-        props.onAdded();
-      } else {
-        props.dispatcher({
-          type: SessionActionKind.EDIT_SESSION,
-          payload: {
-            sessionName,
-            sessionToEdit: props.sessionToEdit,
-            sessionNumber: props.sessionNumber,
-          },
-        });
-      }
+      props.dispatcher({
+        type: SessionActionKind.ADD_SESSION,
+        payload: {
+          sessionName,
+          sessionToEdit: props.sessionToEdit,
+        },
+      });
+      props.onAdded();
 
       props.onClose();
     }
+  };
+
+  const handleEdit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (sessionName) {
+      props.dispatcher({
+        type: SessionActionKind.EDIT_SESSION,
+        payload: {
+          sessionName,
+          sessionToEdit: props.sessionToEdit,
+          sessionNumber: props.sessionNumber,
+        },
+      });
+    }
+
+    props.onClose();
   };
 
   const handleDelete = () => {
@@ -83,7 +90,13 @@ const SessionModal = (props: ExerciseModalDTO) => {
             : "Edit Session"}
         </Typography>
 
-        <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+        <form
+          noValidate
+          autoComplete="off"
+          onSubmit={
+            props.state == SESSION_MODAL_STATE.EDIT ? handleEdit : handleAdd
+          }
+        >
           <TextField
             label="Session Name"
             variant="outlined"
