@@ -4,6 +4,7 @@ import {
   InputAdornment,
   ToggleButtonGroup,
   ToggleButton,
+  IconButton,
 } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { Exercise, ExerciseStatus } from "../../store/exercise";
@@ -15,6 +16,7 @@ import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
 import { colors } from "../../../../theme";
 
@@ -29,6 +31,7 @@ interface ExerciseItemProps {
     series: number,
     difficulty: number
   ): any;
+  delete(): any;
 }
 
 const ExerciseItem = (props: ExerciseItemProps) => {
@@ -179,6 +182,16 @@ const ExerciseItem = (props: ExerciseItemProps) => {
               Done!
             </StyledButton>
           </div>
+
+          <IconButton
+            color="error"
+            aria-label="Edit Session"
+            component="span"
+            style={{ position: "absolute", top: 8, right: 8 }}
+            onClick={props.delete}
+          >
+            <DeleteOutlineIcon />
+          </IconButton>
         </>
       )}
 

@@ -19,5 +19,4 @@ export interface Exercise {
 export interface Session {
   exercises: Exercise[];
   name?: string;
-  id: number;
 }

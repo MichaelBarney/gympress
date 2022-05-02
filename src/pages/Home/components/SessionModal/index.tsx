@@ -5,6 +5,7 @@ import {
   TextField,
   Typography,
   Box,
+  IconButton,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import React, { useState } from "react";
@@ -12,6 +13,7 @@ import { SessionAction, SessionActionKind } from "../../store/sessionReducer";
 import { ModalBox } from "../../../../styles/ModalBox";
 import { StyledButton } from "../../../../styles/StyledButton";
 import { Session } from "../../store/exercise";
+import { DeleteOutline } from "@mui/icons-material";
 
 export enum SESSION_MODAL_STATE {
   CLOSED = "closed",
@@ -25,9 +27,10 @@ interface ExerciseModalDTO {
   onAdded(): any;
   onDelete(): any;
   sessionToEdit?: Session;
+  sessionNumber: number;
 }
 
-const NewSessionModal = (props: ExerciseModalDTO) => {
+const SessionModal = (props: ExerciseModalDTO) => {
   const [sessionName, setSessionName] = useState<string>();
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,6 +51,7 @@ const NewSessionModal = (props: ExerciseModalDTO) => {
           payload: {
             sessionName,
             sessionToEdit: props.sessionToEdit,
+            sessionNumber: props.sessionNumber,
           },
         });
       }
@@ -60,7 +64,7 @@ const NewSessionModal = (props: ExerciseModalDTO) => {
     props.dispatcher({
       type: SessionActionKind.DELETE_SESSION,
       payload: {
-        sessionToDelete: props.sessionToEdit,
+        sessionNumber: props.sessionNumber,
       },
     });
     props.onDelete();
@@ -97,6 +101,18 @@ const NewSessionModal = (props: ExerciseModalDTO) => {
             Ex: Leg Day
           </Typography>
 
+          {props.state == SESSION_MODAL_STATE.EDIT && (
+            <IconButton
+              color="error"
+              aria-label="Delete Session"
+              component="span"
+              style={{ position: "absolute", top: 8, right: 8 }}
+              onClick={handleDelete}
+            >
+              <DeleteOutline />
+            </IconButton>
+          )}
+
           <StyledButton
             type="submit"
             fullWidth
@@ -106,22 +122,10 @@ const NewSessionModal = (props: ExerciseModalDTO) => {
           >
             {props.state == SESSION_MODAL_STATE.NEW ? "Create Session" : "Done"}
           </StyledButton>
-
-          {props.state == SESSION_MODAL_STATE.EDIT && (
-            <StyledButton
-              fullWidth
-              variant="outlined"
-              color="error"
-              style={{ marginTop: 8 }}
-              onClick={handleDelete}
-            >
-              Delete
-            </StyledButton>
-          )}
         </form>
       </ModalBox>
     </Modal>
   );
 };
 
-export default NewSessionModal;
+export default SessionModal;

@@ -64,6 +64,15 @@ const ExerciseList = (props: ExerciseListProps) => {
                 },
               });
             }}
+            delete={() => {
+              dispatcher({
+                type: SessionActionKind.DELETE_EXERCISE,
+                payload: {
+                  exerciseNumber: exercise.originalIndex,
+                  sessionNumber,
+                },
+              });
+            }}
           />
         );
       })}

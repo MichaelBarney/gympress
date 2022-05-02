@@ -190,6 +190,7 @@ const Home = () => {
             setSessionNumber(0);
           }}
           sessionToEdit={currentSession}
+          sessionNumber={sessionNumber}
         />
       )}
     </div>

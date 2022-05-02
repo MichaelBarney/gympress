@@ -2,6 +2,7 @@ import { ExerciseStatus, Session } from "./exercise";
 
 export enum SessionActionKind {
   ADD_EXERCISE = "add-exercise",
+  DELETE_EXERCISE = "delete-exercise",
   COMPLETE_EXERCISE = "complete-exercise",
   ADD_SESSION = "add-session",
   EDIT_SESSION = "edit-session",
@@ -55,7 +56,6 @@ export const sessionsReducer = (state: Session[], action: SessionAction) => {
         {
           name: sessionName,
           exercises: [],
-          id: Date.now(),
         },
       ];
       console.log("ADDED SESSION");
@@ -65,13 +65,12 @@ export const sessionsReducer = (state: Session[], action: SessionAction) => {
     }
 
     case SessionActionKind.EDIT_SESSION: {
-      const { sessionName, sessionToEdit } = payload;
-      const newState: Session[] = state.map((session) => {
-        if (session.id == sessionToEdit.id) {
+      const { sessionName, sessionNumber, sessionToEdit } = payload;
+      const newState: Session[] = state.map((session, index) => {
+        if (index == sessionNumber) {
           return {
             name: sessionName,
             exercises: sessionToEdit.exercises,
-            id: session.id,
           };
         }
         return session;
@@ -83,9 +82,9 @@ export const sessionsReducer = (state: Session[], action: SessionAction) => {
     }
 
     case SessionActionKind.DELETE_SESSION: {
-      const { sessionToDelete } = payload;
-      const newState: Session[] = state.filter((session) => {
-        return session.id != sessionToDelete.id;
+      const { sessionNumber } = payload;
+      const newState: Session[] = state.filter((session, index) => {
+        return index != sessionNumber;
       });
       console.log("DELETE SESSION");
 
@@ -128,6 +127,28 @@ export const sessionsReducer = (state: Session[], action: SessionAction) => {
         } else return session;
       });
       console.log("COMPLETED");
+      localStorage.setItem("sessions", JSON.stringify(newState));
+      return newState;
+    }
+
+    case SessionActionKind.DELETE_EXERCISE: {
+      const { exerciseNumber, sessionNumber } = payload;
+
+      const newState: Session[] = state.map((session, sessionIndex) => {
+        if (sessionIndex === sessionNumber) {
+          return {
+            ...state[sessionIndex],
+            exercises: state[sessionIndex].exercises.filter(
+              (exercise, index) => {
+                if (index === exerciseNumber) {
+                  return false;
+                } else return true;
+              }
+            ),
+          };
+        } else return session;
+      });
+      console.log("DELETED");
       localStorage.setItem("sessions", JSON.stringify(newState));
       return newState;
     }
