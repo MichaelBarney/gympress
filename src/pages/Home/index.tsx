@@ -131,7 +131,7 @@ const Home = () => {
               color="primary"
               aria-label="Edit Session"
               component="span"
-              style={{ marginBottom: 16 }}
+              style={{ marginBottom: 8 }}
               onClick={() => {
                 setSessionModalState(SESSION_MODAL_STATE.EDIT);
               }}
