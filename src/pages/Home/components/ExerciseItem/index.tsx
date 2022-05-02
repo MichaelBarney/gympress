@@ -23,7 +23,12 @@ interface ExerciseItemProps {
   viewOrder: number;
   expanded: boolean;
   expand(): any;
-  complete(newWeight: number, reps: number, difficulty: number): any;
+  complete(
+    newWeight: number,
+    reps: number,
+    series: number,
+    difficulty: number
+  ): any;
 }
 
 const ExerciseItem = (props: ExerciseItemProps) => {
@@ -32,6 +37,8 @@ const ExerciseItem = (props: ExerciseItemProps) => {
 
   const [weight, setWeight] = useState(exercise.currentWeightKg);
   const [reps, setReps] = useState(exercise.reps);
+  const [series, setSeries] = useState(exercise.series);
+
   const [difficulty, setDifficulty] = useState(exercise.difficulty);
 
   // Animate exercise completion
@@ -115,6 +122,17 @@ const ExerciseItem = (props: ExerciseItemProps) => {
                 setReps(parseInt(e.target.value));
               }}
             />
+            <TextField
+              label="Series"
+              variant="outlined"
+              required
+              type="number"
+              style={{ width: "50%" }}
+              defaultValue={series}
+              onChange={(e) => {
+                setSeries(parseInt(e.target.value));
+              }}
+            />
           </div>
           <Typography align="center" style={{ marginBottom: 4 }}>
             Difficulty
@@ -151,7 +169,7 @@ const ExerciseItem = (props: ExerciseItemProps) => {
             color="secondary"
             onClick={() => {
               if (difficulty && weight && reps) {
-                complete(weight, reps, difficulty);
+                complete(weight, reps, series, difficulty);
               }
             }}
             variant="contained"
@@ -168,7 +186,8 @@ const ExerciseItem = (props: ExerciseItemProps) => {
             fontWeight: 300,
           }}
         >
-          {exercise.currentWeightKg}kg | {exercise.reps}x
+          {exercise.currentWeightKg}kg | {exercise.reps} reps |{" "}
+          {exercise.series}x
         </Typography>
       )}
 

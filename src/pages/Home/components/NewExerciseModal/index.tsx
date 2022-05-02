@@ -32,6 +32,7 @@ const NewExerciseModal = (props: ExerciseModalDTO) => {
   const [exerciseDescription, setExerciseDescription] = useState<string>();
   const [exerciseWeight, setExerciseWeight] = useState<number>();
   const [exerciseReps, setExerciseReps] = useState<number>();
+  const [exerciseSeries, setExerciseSeries] = useState<number>();
   const [sessionNumber, setSessionNumber] =
     useState<number>(currentSessionNumber);
 
@@ -45,13 +46,14 @@ const NewExerciseModal = (props: ExerciseModalDTO) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (exerciseName && exerciseReps && exerciseWeight) {
+    if (exerciseName && exerciseReps && exerciseWeight && exerciseSeries) {
       dispatcher({
         type: SessionActionKind.ADD_EXERCISE,
         payload: {
           name: exerciseName,
           currentWeightKg: exerciseWeight,
           reps: exerciseReps,
+          series: exerciseSeries,
           sessionNumber,
         },
       });
@@ -120,7 +122,7 @@ const NewExerciseModal = (props: ExerciseModalDTO) => {
                 setExerciseWeight(parseInt(e.target.value));
               }}
               type="number"
-              style={{ width: "50%" }}
+              style={{ width: "33%" }}
             />
             <TextField
               label="Reps"
@@ -130,7 +132,17 @@ const NewExerciseModal = (props: ExerciseModalDTO) => {
                 setExerciseReps(parseInt(e.target.value));
               }}
               type="number"
-              style={{ width: "50%" }}
+              style={{ width: "33%" }}
+            />
+            <TextField
+              label="Series"
+              variant="outlined"
+              required
+              onChange={(e) => {
+                setExerciseSeries(parseInt(e.target.value));
+              }}
+              type="number"
+              style={{ width: "33%" }}
             />
           </div>
           <StyledButton

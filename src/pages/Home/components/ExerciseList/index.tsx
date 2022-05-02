@@ -59,6 +59,7 @@ const ExerciseList = (props: ExerciseListProps) => {
                   sessionNumber,
                   newWeight: weight,
                   newReps: reps,
+                  newSeries: series,
                   newDifficulty: difficulty,
                 },
               });

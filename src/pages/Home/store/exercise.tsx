@@ -10,6 +10,7 @@ export interface Exercise {
   description?: string;
   currentWeightKg: number;
   reps: number;
+  series: number;
   status: ExerciseStatus;
   originalIndex?: number;
   difficulty?: number;
