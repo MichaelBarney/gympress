@@ -85,98 +85,101 @@ const ExerciseItem = (props: ExerciseItemProps) => {
       </Typography>
 
       {expanded && (
-        <div style={{ marginTop: 24 }}>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              columnGap: 8,
-              marginBottom: 16,
-            }}
-          >
-            <TextField
-              label="Weight"
-              variant="outlined"
-              defaultValue={weight}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">kg</InputAdornment>
-                ),
+        <>
+          <Typography>{exercise.description}</Typography>
+          <div style={{ marginTop: 24 }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                columnGap: 8,
+                marginBottom: 16,
               }}
-              required
-              type="number"
-              style={{ width: "50%" }}
-              onChange={(e) => {
-                setWeight(parseInt(e.target.value));
+            >
+              <TextField
+                label="Weight"
+                variant="outlined"
+                defaultValue={weight}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">kg</InputAdornment>
+                  ),
+                }}
+                required
+                type="number"
+                style={{ width: "50%" }}
+                onChange={(e) => {
+                  setWeight(parseInt(e.target.value));
+                }}
+              />
+              <TextField
+                label="Reps"
+                variant="outlined"
+                required
+                type="number"
+                style={{ width: "50%" }}
+                defaultValue={reps}
+                onChange={(e) => {
+                  setReps(parseInt(e.target.value));
+                }}
+              />
+              <TextField
+                label="Series"
+                variant="outlined"
+                required
+                type="number"
+                style={{ width: "50%" }}
+                defaultValue={series}
+                onChange={(e) => {
+                  setSeries(parseInt(e.target.value));
+                }}
+              />
+            </div>
+            <Typography align="center" style={{ marginBottom: 4 }}>
+              Difficulty
+            </Typography>
+            <ToggleButtonGroup
+              value={difficulty}
+              exclusive
+              onChange={(e, newDifficulty) => {
+                setDifficulty(newDifficulty);
               }}
-            />
-            <TextField
-              label="Reps"
-              variant="outlined"
-              required
-              type="number"
-              style={{ width: "50%" }}
-              defaultValue={reps}
-              onChange={(e) => {
-                setReps(parseInt(e.target.value));
-              }}
-            />
-            <TextField
-              label="Series"
-              variant="outlined"
-              required
-              type="number"
-              style={{ width: "50%" }}
-              defaultValue={series}
-              onChange={(e) => {
-                setSeries(parseInt(e.target.value));
-              }}
-            />
-          </div>
-          <Typography align="center" style={{ marginBottom: 4 }}>
-            Difficulty
-          </Typography>
-          <ToggleButtonGroup
-            value={difficulty}
-            exclusive
-            onChange={(e, newDifficulty) => {
-              setDifficulty(newDifficulty);
-            }}
-            fullWidth
-            color="secondary"
-          >
-            <ToggleButton value={1} style={{ padding: "4px 0px" }}>
-              1
-            </ToggleButton>
-            <ToggleButton value={2} style={{ padding: "4px 0px" }}>
-              2
-            </ToggleButton>
-            <ToggleButton value={3} style={{ padding: "4px 0px" }}>
-              3
-            </ToggleButton>
-            <ToggleButton value={4} style={{ padding: "4px 0px" }}>
-              4
-            </ToggleButton>
-            <ToggleButton value={5} style={{ padding: "4px 0px" }}>
-              5
-            </ToggleButton>
-          </ToggleButtonGroup>
+              fullWidth
+              color="secondary"
+            >
+              <ToggleButton value={1} style={{ padding: "4px 0px" }}>
+                1
+              </ToggleButton>
+              <ToggleButton value={2} style={{ padding: "4px 0px" }}>
+                2
+              </ToggleButton>
+              <ToggleButton value={3} style={{ padding: "4px 0px" }}>
+                3
+              </ToggleButton>
+              <ToggleButton value={4} style={{ padding: "4px 0px" }}>
+                4
+              </ToggleButton>
+              <ToggleButton value={5} style={{ padding: "4px 0px" }}>
+                5
+              </ToggleButton>
+            </ToggleButtonGroup>
 
-          <StyledButton
-            type="submit"
-            style={{ width: "100%", marginBottom: 8, marginTop: 24 }}
-            color="secondary"
-            onClick={() => {
-              if (difficulty && weight && reps) {
-                complete(weight, reps, series, difficulty);
-              }
-            }}
-            variant="contained"
-          >
-            Done!
-          </StyledButton>
-        </div>
+            <StyledButton
+              type="submit"
+              style={{ width: "100%", marginBottom: 8, marginTop: 24 }}
+              color="secondary"
+              onClick={() => {
+                if (difficulty && weight && reps) {
+                  complete(weight, reps, series, difficulty);
+                }
+              }}
+              variant="contained"
+            >
+              Done!
+            </StyledButton>
+          </div>
+        </>
       )}
 
       {!expanded && (

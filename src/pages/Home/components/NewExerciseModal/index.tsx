@@ -55,6 +55,7 @@ const NewExerciseModal = (props: ExerciseModalDTO) => {
           reps: exerciseReps,
           series: exerciseSeries,
           sessionNumber,
+          description: exerciseDescription,
         },
       });
 

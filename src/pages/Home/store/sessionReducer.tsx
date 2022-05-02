@@ -18,7 +18,14 @@ export const sessionsReducer = (state: Session[], action: SessionAction) => {
   const { type, payload } = action;
   switch (type) {
     case SessionActionKind.ADD_EXERCISE: {
-      const { name, currentWeightKg, reps, series, sessionNumber } = payload;
+      const {
+        name,
+        currentWeightKg,
+        reps,
+        series,
+        sessionNumber,
+        description,
+      } = payload;
 
       const exerciseToAdd = {
         status: ExerciseStatus.INCOMPLETE,
@@ -26,6 +33,7 @@ export const sessionsReducer = (state: Session[], action: SessionAction) => {
         currentWeightKg,
         reps,
         series,
+        description,
       };
       const newState: Session[] = state.map((session, index) => {
         if (index === sessionNumber) {
