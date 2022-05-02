@@ -120,7 +120,7 @@ const NewExerciseModal = (props: ExerciseModalDTO) => {
               }}
               required
               onChange={(e) => {
-                setExerciseWeight(parseInt(e.target.value));
+                setExerciseWeight(parseFloat(e.target.value));
               }}
               type="number"
               style={{ width: "33%" }}
