@@ -23,6 +23,9 @@ export const theme = createTheme({
       main: colors.green,
       contrastText: colors.black,
     },
+    error: {
+      main: colors.lightRed,
+    },
     background: {
       default: colors.black,
     },

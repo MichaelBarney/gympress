@@ -4,7 +4,9 @@ export enum SessionActionKind {
   ADD_EXERCISE = "add-exercise",
   COMPLETE_EXERCISE = "complete-exercise",
   ADD_SESSION = "add-session",
+  EDIT_SESSION = "edit-session",
   CLEAR_SESSION = "clear-session",
+  DELETE_SESSION = "delete-session",
 }
 
 export interface SessionAction {
@@ -45,6 +47,7 @@ export const sessionsReducer = (state: Session[], action: SessionAction) => {
         {
           name: sessionName,
           exercises: [],
+          id: Date.now(),
         },
       ];
       console.log("ADDED SESSION");
@@ -52,6 +55,36 @@ export const sessionsReducer = (state: Session[], action: SessionAction) => {
       localStorage.setItem("sessions", JSON.stringify(newState));
       return newState;
     }
+
+    case SessionActionKind.EDIT_SESSION: {
+      const { sessionName, sessionToEdit } = payload;
+      const newState: Session[] = state.map((session) => {
+        if (session.id == sessionToEdit.id) {
+          return {
+            name: sessionName,
+            exercises: sessionToEdit.exercises,
+            id: session.id,
+          };
+        }
+        return session;
+      });
+      console.log("ADDED SESSION");
+
+      localStorage.setItem("sessions", JSON.stringify(newState));
+      return newState;
+    }
+
+    case SessionActionKind.DELETE_SESSION: {
+      const { sessionToDelete } = payload;
+      const newState: Session[] = state.filter((session) => {
+        return session.id != sessionToDelete.id;
+      });
+      console.log("DELETE SESSION");
+
+      localStorage.setItem("sessions", JSON.stringify(newState));
+      return newState;
+    }
+
     case SessionActionKind.COMPLETE_EXERCISE: {
       const {
         exerciseNumber,

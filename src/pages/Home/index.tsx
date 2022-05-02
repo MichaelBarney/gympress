@@ -1,6 +1,7 @@
 import {
   Button,
   Divider,
+  IconButton,
   MenuItem,
   TextField,
   Typography,
@@ -13,20 +14,22 @@ import { ALPHABET } from "../../consts";
 import AddIcon from "@mui/icons-material/Add";
 
 import NewExerciseModal from "./components/NewExerciseModal";
-import NewSessionModal from "./components/NewSessionModal";
+import SessionModal, { SESSION_MODAL_STATE } from "./components/SessionModal";
 import ExerciseList from "./components/ExerciseList";
 import { colors } from "../../theme";
 import { StyledButton } from "../../styles/StyledButton";
 import { Session } from "./store/exercise";
-import styled from "styled-components";
 import { SessionTitle } from "./style";
+
+import EditIcon from "@mui/icons-material/Edit";
 
 const Home = () => {
   const loadedSessionsString = localStorage.getItem("sessions");
   const loadedCurrentSession = localStorage.getItem("currentSession");
 
   const [exerciseModalOpen, setExerciseModalOpen] = useState<boolean>(false);
-  const [sessionModalOpen, setSessionModalOpen] = useState<boolean>(false);
+  const [sessionModalState, setSessionModalState] =
+    useState<SESSION_MODAL_STATE>(SESSION_MODAL_STATE.CLOSED);
 
   const [sessions, dispatchSessions] = useReducer(
     sessionsReducer,
@@ -39,7 +42,6 @@ const Home = () => {
   );
 
   useEffect(() => {
-    console.log("SET CURRENT SESSION ", sessionNumber);
     setCurrentSession(sessions[sessionNumber]);
   }, [sessionNumber, sessions]);
 
@@ -47,31 +49,49 @@ const Home = () => {
     <div>
       {currentSession && (
         <>
-          <SessionTitle
-            label="Today's Session:"
-            variant="standard"
-            onChange={(e) => {
-              if (e.target.value == "new") {
-                setSessionModalOpen(true);
-              } else {
-                setSessionNumber(parseInt(e.target.value));
-              }
+          <div
+            style={{
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "space-between",
             }}
-            select
-            fullWidth
-            value={sessionNumber}
           >
-            {sessions.map((session, index) => (
-              <MenuItem key={index} value={index}>
-                {session.name}
+            <SessionTitle
+              label="Today's Session:"
+              variant="standard"
+              onChange={(e) => {
+                if (e.target.value == "new") {
+                  setSessionModalState(SESSION_MODAL_STATE.NEW);
+                } else {
+                  setSessionNumber(parseInt(e.target.value));
+                }
+              }}
+              select
+              value={sessionNumber}
+            >
+              {sessions.map((session, index) => (
+                <MenuItem key={index} value={index}>
+                  {session.name}
+                </MenuItem>
+              ))}
+              <MenuItem key={"new"} value={"new"}>
+                <AddIcon />
+                &nbsp; New Session
               </MenuItem>
-            ))}
-            <MenuItem key={"new"} value={"new"}>
-              <AddIcon />
-              &nbsp; New Session
-            </MenuItem>
-          </SessionTitle>
+            </SessionTitle>
 
+            <IconButton
+              color="primary"
+              aria-label="Edit Session"
+              component="span"
+              style={{ marginBottom: 16 }}
+              onClick={() => {
+                setSessionModalState(SESSION_MODAL_STATE.EDIT);
+              }}
+            >
+              <EditIcon />
+            </IconButton>
+          </div>
           <Typography
             style={{ fontSize: 16, color: colors.lightBlack, marginBottom: 32 }}
           >
@@ -126,7 +146,7 @@ const Home = () => {
         <StyledButton
           fullWidth
           onClick={() => {
-            setSessionModalOpen(true);
+            setSessionModalState(SESSION_MODAL_STATE.NEW);
           }}
           style={{ marginTop: 16 }}
           variant="outlined"
@@ -155,17 +175,21 @@ const Home = () => {
         />
       )}
 
-      {sessionModalOpen && (
-        <NewSessionModal
+      {sessionModalState != SESSION_MODAL_STATE.CLOSED && (
+        <SessionModal
           onClose={() => {
-            setSessionModalOpen(false);
+            setSessionModalState(SESSION_MODAL_STATE.CLOSED);
           }}
-          open={sessionModalOpen}
+          state={sessionModalState}
           dispatcher={dispatchSessions}
           onAdded={() => {
             console.log("Added: ", sessions.length);
             setSessionNumber(sessions.length);
           }}
+          onDelete={() => {
+            setSessionNumber(0);
+          }}
+          sessionToEdit={currentSession}
         />
       )}
     </div>
