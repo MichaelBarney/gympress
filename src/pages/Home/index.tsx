@@ -43,7 +43,7 @@ const Home = () => {
   const captureElement = useRef(null);
 
   return (
-    <div>
+    <div ref={captureElement}>
       {currentSession && (
         <>
           <IconButton
@@ -52,15 +52,25 @@ const Home = () => {
             component="span"
             style={{ position: "absolute", top: 8, right: 8 }}
             onClick={async () => {
-              if (!("share" in navigator) || !captureElement.current) {
-                console.log("No Share", captureElement.current, navigator);
-                return;
-              }
+              if (!captureElement.current) return;
+
               // `element` is the HTML element you want to share.
               // `backgroundColor` is the desired background color.
-              const canvas = await html2canvas(captureElement.current);
+              const canvas = await html2canvas(captureElement.current, {
+                backgroundColor: colors.black,
+              });
               canvas.toBlob(async (blob) => {
                 if (!blob) return;
+
+                if (!("share" in navigator)) {
+                  console.log("No Share", captureElement.current, navigator);
+                  await navigator.clipboard.write([
+                    new ClipboardItem({ "image/png": blob }),
+                  ]);
+                  console.log("Copied to Clipboard");
+                  return;
+                }
+
                 // Even if you want to share just one file you need to
                 // send them as an array of files.
                 const files = [
@@ -92,7 +102,6 @@ const Home = () => {
               alignItems: "flex-end",
               justifyContent: "space-between",
             }}
-            ref={captureElement}
           >
             <SessionTitle
               label="Today's Session:"
