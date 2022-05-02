@@ -21,6 +21,7 @@ export const theme = createTheme({
     },
     secondary: {
       main: colors.green,
+      contrastText: colors.black,
     },
     background: {
       default: colors.black,
