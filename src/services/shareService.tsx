@@ -13,9 +13,10 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 interface ShareDTO {
   currentSession: Session;
   onGenerated(): any;
+  openSnackbar(): any;
 }
 const Share = (props: ShareDTO) => {
-  const { currentSession, onGenerated } = props;
+  const { currentSession, onGenerated, openSnackbar } = props;
   const divRef = useCallback(async (node) => {
     if (node) {
       console.log("a");
@@ -33,6 +34,7 @@ const Share = (props: ShareDTO) => {
           new ClipboardItem({ "image/png": blob }),
         ]);
         console.log("Copied to Clipboard");
+        openSnackbar();
         return;
       }
 
@@ -59,7 +61,7 @@ const Share = (props: ShareDTO) => {
   }, []);
 
   return (
-    <div style={{ padding: 16, width: "320px" }} ref={divRef}>
+    <div style={{ padding: "24px 16px", width: "320px" }} ref={divRef}>
       <Typography variant="h4">{currentSession.name}</Typography>
       <Typography variant="subtitle1" style={{ marginBottom: 32 }}>
         {new Date().toLocaleDateString()}

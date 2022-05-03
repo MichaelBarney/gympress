@@ -1,4 +1,4 @@
-import { IconButton, MenuItem, Typography } from "@mui/material";
+import { IconButton, MenuItem, Snackbar, Typography } from "@mui/material";
 import { useReducer, useRef } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -23,7 +23,7 @@ const Home = () => {
   const loadedCurrentSession = localStorage.getItem("currentSession");
 
   const [isSharing, setIsSharing] = useState(false);
-
+  const [shareSnackbar, setShareSnackbar] = useState(false);
   const [exerciseModalOpen, setExerciseModalOpen] = useState<boolean>(false);
   const [sessionModalState, setSessionModalState] =
     useState<SESSION_MODAL_STATE>(SESSION_MODAL_STATE.CLOSED);
@@ -209,8 +209,19 @@ const Home = () => {
           onGenerated={() => {
             setIsSharing(false);
           }}
+          openSnackbar={() => {
+            setShareSnackbar(true);
+          }}
         />
       )}
+      <Snackbar
+        open={shareSnackbar}
+        autoHideDuration={6000}
+        onClose={() => {
+          setShareSnackbar(false);
+        }}
+        message="Coppied to Clipboard"
+      />
     </div>
   );
 };
