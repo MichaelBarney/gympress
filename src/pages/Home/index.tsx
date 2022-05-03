@@ -16,11 +16,13 @@ import { SessionTitle } from "./style";
 
 import EditIcon from "@mui/icons-material/Edit";
 import ShareIcon from "@mui/icons-material/Share";
-import share from "../../services/shareService";
+import Share from "../../services/shareService";
 
 const Home = () => {
   const loadedSessionsString = localStorage.getItem("sessions");
   const loadedCurrentSession = localStorage.getItem("currentSession");
+
+  const [isSharing, setIsSharing] = useState(false);
 
   const [exerciseModalOpen, setExerciseModalOpen] = useState<boolean>(false);
   const [sessionModalState, setSessionModalState] =
@@ -40,10 +42,8 @@ const Home = () => {
     setCurrentSession(sessions[sessionNumber]);
   }, [sessionNumber, sessions]);
 
-  const captureElement = useRef(null);
-
   return (
-    <div ref={captureElement}>
+    <div style={{ overflowX: "hidden" }}>
       {currentSession && (
         <>
           <IconButton
@@ -52,7 +52,7 @@ const Home = () => {
             component="span"
             style={{ position: "absolute", top: 8, right: 8 }}
             onClick={() => {
-              share(currentSession);
+              setIsSharing(true);
             }}
           >
             <ShareIcon />
@@ -200,6 +200,14 @@ const Home = () => {
           }}
           sessionToEdit={currentSession}
           sessionNumber={sessionNumber}
+        />
+      )}
+      {currentSession && isSharing && (
+        <Share
+          currentSession={currentSession}
+          onGenerated={() => {
+            setIsSharing(false);
+          }}
         />
       )}
     </div>
