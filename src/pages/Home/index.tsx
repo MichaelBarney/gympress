@@ -16,7 +16,7 @@ import { SessionTitle } from "./style";
 
 import EditIcon from "@mui/icons-material/Edit";
 import ShareIcon from "@mui/icons-material/Share";
-import html2canvas from "html2canvas";
+import share from "../../services/shareService";
 
 const Home = () => {
   const loadedSessionsString = localStorage.getItem("sessions");
@@ -51,46 +51,8 @@ const Home = () => {
             aria-label="Share"
             component="span"
             style={{ position: "absolute", top: 8, right: 8 }}
-            onClick={async () => {
-              if (!captureElement.current) return;
-
-              // `element` is the HTML element you want to share.
-              // `backgroundColor` is the desired background color.
-              const canvas = await html2canvas(captureElement.current, {
-                backgroundColor: colors.black,
-              });
-              canvas.toBlob(async (blob) => {
-                if (!blob) return;
-
-                if (!("share" in navigator)) {
-                  console.log("No Share", captureElement.current, navigator);
-                  await navigator.clipboard.write([
-                    new ClipboardItem({ "image/png": blob }),
-                  ]);
-                  console.log("Copied to Clipboard");
-                  return;
-                }
-
-                // Even if you want to share just one file you need to
-                // send them as an array of files.
-                const files = [
-                  new File([blob], "image.png", { type: blob.type }),
-                ];
-                const shareData = {
-                  text: "Some text",
-                  title: "Some title",
-                  files,
-                };
-                if (navigator.canShare(shareData)) {
-                  try {
-                    await navigator.share(shareData);
-                  } catch (err: unknown) {
-                    console.error(err);
-                  }
-                } else {
-                  console.warn("Sharing not supported", shareData);
-                }
-              });
+            onClick={() => {
+              share(currentSession);
             }}
           >
             <ShareIcon />

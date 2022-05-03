@@ -28,7 +28,7 @@ ReactDOM.render(
           </Typography>
         </Toolbar>
       </AppBar>
-      <Container style={{ position: "fixed" }}>
+      <Container style={{ position: "relative" }}>
         <Home />
       </Container>
     </ThemeProvider>

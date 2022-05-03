@@ -18,5 +18,5 @@ export interface Exercise {
 
 export interface Session {
   exercises: Exercise[];
-  name?: string;
+  name: string;
 }
