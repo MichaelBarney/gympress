@@ -63,6 +63,7 @@ const Home = () => {
               display: "flex",
               alignItems: "flex-end",
               justifyContent: "space-between",
+              marginTop: 16,
             }}
           >
             <SessionTitle
