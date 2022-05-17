@@ -1,7 +1,7 @@
 import { Exercise, ExerciseStatus, Session } from "../../store/exercise";
 import { SessionAction, SessionActionKind } from "../../store/sessionReducer";
 import { StyledList } from "./style";
-import { Component, Dispatch, ReactChild, useEffect, useState } from "react";
+import { Dispatch, useEffect, useRef, useState } from "react";
 import ExerciseItem from "../ExerciseItem";
 
 interface ExerciseListProps {
@@ -34,18 +34,13 @@ const ExerciseList = (props: ExerciseListProps) => {
     setExpandedExercise(getFirstIncompleteExercise(currentSession?.exercises));
   }, [currentSession?.exercises]);
 
-  // useEffect(() => {
-  //   clearSession(sessionNumber, dispatcher);
-  //   localStorage.clear();
-  // }, []);
-
   return (
     <StyledList>
       {exercisesView?.map((exercise, index) => {
         return (
           <ExerciseItem
             exercise={exercise}
-            key={exercise.name}
+            key={index}
             viewOrder={index}
             expanded={expandedExercise == exercise.originalIndex}
             expand={() => {

@@ -19,15 +19,11 @@ const Share = (props: ShareDTO) => {
   const { currentSession, onGenerated, openSnackbar } = props;
   const divRef = useCallback(async (node) => {
     if (node) {
-      console.log("a");
       const blob = await htmlToImage.toBlob(node, {
         backgroundColor: colors.black,
       });
       onGenerated();
-      console.log("ab");
       if (!blob) return;
-
-      console.log("c");
 
       if (!("share" in navigator)) {
         await navigator.clipboard.write([
@@ -38,14 +34,12 @@ const Share = (props: ShareDTO) => {
         return;
       }
 
-      console.log("d");
-
       // Even if you want to share just one file you need to
       // send them as an array of files.
       const files = [new File([blob], "image.png", { type: blob.type })];
       const shareData = {
-        text: "Some text",
-        title: "Some title",
+        text: "Já fui pra academia hoje, e voce? https://michaelbarney.github.io/gympress/",
+        title: "GympPress",
         files,
       };
       if (navigator.canShare(shareData)) {
@@ -61,7 +55,10 @@ const Share = (props: ShareDTO) => {
   }, []);
 
   return (
-    <div style={{ padding: "24px 16px", width: "320px" }} ref={divRef}>
+    <div
+      style={{ padding: "32px 16px 24px 16px", width: "320px" }}
+      ref={divRef}
+    >
       <Typography variant="h4">{currentSession.name}</Typography>
       <Typography variant="subtitle1" style={{ marginBottom: 32 }}>
         {new Date().toLocaleDateString()}

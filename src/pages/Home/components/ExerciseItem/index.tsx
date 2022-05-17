@@ -82,6 +82,7 @@ const ExerciseItem = (props: ExerciseItemProps) => {
         variant="h5"
         style={{
           display: "inline",
+          marginRight: 32,
         }}
       >
         {exercise.name}
@@ -98,8 +99,10 @@ const ExerciseItem = (props: ExerciseItemProps) => {
 
       {expanded && (
         <>
-          <Typography>{exercise.description}</Typography>
-          <div style={{ marginTop: 24 }}>
+          <Typography style={{ marginTop: 8 }}>
+            {exercise.description}
+          </Typography>
+          <div style={{ marginTop: 16 }}>
             <TextField
               label="Weight"
               variant="outlined"
