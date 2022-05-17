@@ -216,7 +216,6 @@ const Home = () => {
           state={sessionModalState}
           dispatcher={dispatchSessions}
           onAdded={() => {
-            console.log("Added: ", sessions.length);
             setSessionNumber(sessions.length);
           }}
           onDelete={() => {
