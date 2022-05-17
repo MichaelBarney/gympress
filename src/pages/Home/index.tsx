@@ -2,7 +2,7 @@ import { IconButton, MenuItem, Snackbar, Typography } from "@mui/material";
 import { useReducer, useRef } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
-import { sessionsReducer } from "./store/sessionReducer";
+import { SessionActionKind, sessionsReducer } from "./store/sessionReducer";
 import { ALPHABET } from "../../consts";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -17,6 +17,7 @@ import { SessionTitle } from "./style";
 import EditIcon from "@mui/icons-material/Edit";
 import ShareIcon from "@mui/icons-material/Share";
 import Share from "../../services/shareService";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
 const Home = () => {
   const loadedSessionsString = localStorage.getItem("sessions");
@@ -136,7 +137,7 @@ const Home = () => {
             onClick={() => {
               setExerciseModalOpen(true);
             }}
-            style={{ marginTop: 8, marginBottom: 32 }}
+            style={{ marginTop: 8, marginBottom: 8 }}
             variant="outlined"
             color="secondary"
           >
@@ -148,6 +149,28 @@ const Home = () => {
               }}
             />
             New Exercise
+          </StyledButton>
+
+          <StyledButton
+            fullWidth
+            onClick={() => {
+              dispatchSessions({
+                type: SessionActionKind.CLEAR_SESSION,
+                payload: { sessionNumber: sessionNumber },
+              });
+            }}
+            style={{ marginTop: 8, marginBottom: 32 }}
+            variant="outlined"
+            color="primary"
+          >
+            <RestartAltIcon
+              style={{
+                fontSize: 32,
+                position: "absolute",
+                left: 16,
+              }}
+            />
+            Restart Session
           </StyledButton>
         </>
       )}
