@@ -29,7 +29,6 @@ const Share = (props: ShareDTO) => {
         await navigator.clipboard.write([
           new ClipboardItem({ "image/png": blob }),
         ]);
-        console.log("Copied to Clipboard");
         openSnackbar();
         return;
       }
@@ -77,7 +76,6 @@ const Share = (props: ShareDTO) => {
               key={exercise.originalIndex}
             >
               <Typography variant="h5">{exercise.name}</Typography>
-              {console.log(exercise.status)}
               {exercise.status == ExerciseStatus.INCOMPLETE && (
                 <RadioButtonUncheckedIcon />
               )}

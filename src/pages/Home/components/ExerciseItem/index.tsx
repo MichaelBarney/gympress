@@ -46,13 +46,12 @@ const ExerciseItem = (props: ExerciseItemProps) => {
 
   // Animate exercise completion
   const oldY = useRef<number>();
+
   useEffect(() => {
     const el = divRef.current;
     if (el && oldY.current) {
       const newOffset = el.getBoundingClientRect().top;
       const changeInY = oldY.current - newOffset;
-      console.log(changeInY);
-
       if (changeInY) {
         requestAnimationFrame(() => {
           el.style.transition = "";
@@ -106,7 +105,7 @@ const ExerciseItem = (props: ExerciseItemProps) => {
             <TextField
               label="Weight"
               variant="outlined"
-              defaultValue={weight}
+              defaultValue={exercise.currentWeightKg}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">kg</InputAdornment>
@@ -119,28 +118,6 @@ const ExerciseItem = (props: ExerciseItemProps) => {
                 setWeight(parseInt(e.target.value));
               }}
             />
-            {/* <TextField
-                label="Reps"
-                variant="outlined"
-                required
-                type="number"
-                style={{ width: "50%" }}
-                defaultValue={reps}
-                onChange={(e) => {
-                  setReps(parseInt(e.target.value));
-                }}
-              />
-              <TextField
-                label="Series"
-                variant="outlined"
-                required
-                type="number"
-                style={{ width: "50%" }}
-                defaultValue={series}
-                onChange={(e) => {
-                  setSeries(parseInt(e.target.value));
-                }}
-              /> */}
             <Typography
               align="center"
               style={{ marginBottom: 4, marginTop: 16 }}

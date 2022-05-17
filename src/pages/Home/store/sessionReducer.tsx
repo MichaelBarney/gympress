@@ -110,7 +110,7 @@ export const sessionsReducer = (state: Session[], action: SessionAction) => {
               if (index === exerciseNumber) {
                 return {
                   ...exercise,
-                  weight: newWeight,
+                  currentWeightKg: newWeight,
                   reps: newReps,
                   series: newSeries,
                   difficulty: newDifficulty,
@@ -156,7 +156,6 @@ export const sessionsReducer = (state: Session[], action: SessionAction) => {
     case SessionActionKind.CLEAR_SESSION: {
       const { sessionNumber } = payload;
 
-      console.log("Current Session: ", sessionNumber);
       const newState: Session[] = state.map((session, sessionIndex) => {
         if (sessionIndex == sessionNumber) {
           return {

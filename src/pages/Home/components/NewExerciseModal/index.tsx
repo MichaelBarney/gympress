@@ -36,13 +36,6 @@ const NewExerciseModal = (props: ExerciseModalDTO) => {
   const [sessionNumber, setSessionNumber] =
     useState<number>(currentSessionNumber);
 
-  useEffect(() => {
-    return () => {
-      console.log("Did Unmount");
-    };
-  }, []);
-  console.log(exerciseName);
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
