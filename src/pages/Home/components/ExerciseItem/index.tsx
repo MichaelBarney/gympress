@@ -87,36 +87,36 @@ const ExerciseItem = (props: ExerciseItemProps) => {
         {exercise.name}
       </Typography>
 
+      <Typography
+        variant="subtitle1"
+        style={{
+          fontWeight: 300,
+        }}
+      >
+        {exercise.currentWeightKg}kg | {exercise.reps} reps | {exercise.series}x
+      </Typography>
+
       {expanded && (
         <>
           <Typography>{exercise.description}</Typography>
           <div style={{ marginTop: 24 }}>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                columnGap: 8,
-                marginBottom: 16,
+            <TextField
+              label="Weight"
+              variant="outlined"
+              defaultValue={weight}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">kg</InputAdornment>
+                ),
               }}
-            >
-              <TextField
-                label="Weight"
-                variant="outlined"
-                defaultValue={weight}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">kg</InputAdornment>
-                  ),
-                }}
-                required
-                type="number"
-                style={{ width: "50%" }}
-                onChange={(e) => {
-                  setWeight(parseInt(e.target.value));
-                }}
-              />
-              <TextField
+              required
+              type="number"
+              fullWidth
+              onChange={(e) => {
+                setWeight(parseInt(e.target.value));
+              }}
+            />
+            {/* <TextField
                 label="Reps"
                 variant="outlined"
                 required
@@ -137,9 +137,11 @@ const ExerciseItem = (props: ExerciseItemProps) => {
                 onChange={(e) => {
                   setSeries(parseInt(e.target.value));
                 }}
-              />
-            </div>
-            <Typography align="center" style={{ marginBottom: 4 }}>
+              /> */}
+            <Typography
+              align="center"
+              style={{ marginBottom: 4, marginTop: 16 }}
+            >
               Difficulty
             </Typography>
             <ToggleButtonGroup
@@ -193,18 +195,6 @@ const ExerciseItem = (props: ExerciseItemProps) => {
             <DeleteOutlineIcon />
           </IconButton>
         </>
-      )}
-
-      {!expanded && (
-        <Typography
-          variant="subtitle1"
-          style={{
-            fontWeight: 300,
-          }}
-        >
-          {exercise.currentWeightKg}kg | {exercise.reps} reps |{" "}
-          {exercise.series}x
-        </Typography>
       )}
 
       {exercise.status == ExerciseStatus.INCOMPLETE && !expanded && (

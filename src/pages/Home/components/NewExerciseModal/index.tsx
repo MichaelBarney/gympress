@@ -101,7 +101,19 @@ const NewExerciseModal = (props: ExerciseModalDTO) => {
             }}
             style={{ marginBottom: 16 }}
           />
-
+          <TextField
+            label="Weight"
+            variant="outlined"
+            InputProps={{
+              endAdornment: <InputAdornment position="end">kg</InputAdornment>,
+            }}
+            required
+            onChange={(e) => {
+              setExerciseWeight(parseFloat(e.target.value));
+            }}
+            type="number"
+            style={{ marginBottom: 16 }}
+          />
           <div
             style={{
               display: "flex",
@@ -111,21 +123,6 @@ const NewExerciseModal = (props: ExerciseModalDTO) => {
             }}
           >
             <TextField
-              label="Weight"
-              variant="outlined"
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">kg</InputAdornment>
-                ),
-              }}
-              required
-              onChange={(e) => {
-                setExerciseWeight(parseFloat(e.target.value));
-              }}
-              type="number"
-              style={{ width: "33%" }}
-            />
-            <TextField
               label="Reps"
               variant="outlined"
               required
@@ -133,7 +130,7 @@ const NewExerciseModal = (props: ExerciseModalDTO) => {
                 setExerciseReps(parseInt(e.target.value));
               }}
               type="number"
-              style={{ width: "33%" }}
+              style={{ width: "50%" }}
             />
             <TextField
               label="Series"
@@ -143,7 +140,7 @@ const NewExerciseModal = (props: ExerciseModalDTO) => {
                 setExerciseSeries(parseInt(e.target.value));
               }}
               type="number"
-              style={{ width: "33%" }}
+              style={{ width: "50%" }}
             />
           </div>
           <StyledButton
