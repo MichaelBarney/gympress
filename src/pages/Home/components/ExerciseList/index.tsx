@@ -46,15 +46,13 @@ const ExerciseList = (props: ExerciseListProps) => {
             expand={() => {
               setExpandedExercise(exercise.originalIndex);
             }}
-            complete={(weight, reps, series, difficulty) => {
+            complete={(weight, difficulty) => {
               dispatcher({
                 type: SessionActionKind.COMPLETE_EXERCISE,
                 payload: {
                   exerciseNumber: exercise.originalIndex,
                   sessionNumber,
                   newWeight: weight,
-                  newReps: reps,
-                  newSeries: series,
                   newDifficulty: difficulty,
                 },
               });

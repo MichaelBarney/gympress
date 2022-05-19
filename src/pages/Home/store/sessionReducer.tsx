@@ -93,14 +93,8 @@ export const sessionsReducer = (state: Session[], action: SessionAction) => {
     }
 
     case SessionActionKind.COMPLETE_EXERCISE: {
-      const {
-        exerciseNumber,
-        sessionNumber,
-        newWeight,
-        newReps,
-        newDifficulty,
-        newSeries,
-      } = payload;
+      const { exerciseNumber, sessionNumber, newWeight, newDifficulty } =
+        payload;
 
       const newState: Session[] = state.map((session, sessionIndex) => {
         if (sessionIndex === sessionNumber) {
@@ -111,8 +105,6 @@ export const sessionsReducer = (state: Session[], action: SessionAction) => {
                 return {
                   ...exercise,
                   currentWeightKg: newWeight,
-                  reps: newReps,
-                  series: newSeries,
                   difficulty: newDifficulty,
                   status:
                     newWeight > exercise.currentWeightKg
@@ -126,7 +118,7 @@ export const sessionsReducer = (state: Session[], action: SessionAction) => {
           };
         } else return session;
       });
-      console.log("COMPLETED");
+      console.log("COMPLETED ", newState);
       localStorage.setItem("sessions", JSON.stringify(newState));
       return newState;
     }

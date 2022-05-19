@@ -25,28 +25,23 @@ interface ExerciseItemProps {
   viewOrder: number;
   expanded: boolean;
   expand(): any;
-  complete(
-    newWeight: number,
-    reps: number,
-    series: number,
-    difficulty: number
-  ): any;
+  complete(newWeight: number, difficulty: number): any;
   delete(): any;
 }
 
 const ExerciseItem = (props: ExerciseItemProps) => {
   const divRef = useRef<HTMLDivElement>(null);
   const { exercise, expand, expanded, viewOrder, complete } = props;
-
   const [weight, setWeight] = useState(exercise.currentWeightKg);
-  const [reps, setReps] = useState(exercise.reps);
-  const [series, setSeries] = useState(exercise.series);
-
   const [difficulty, setDifficulty] = useState(exercise.difficulty);
+
+  useEffect(() => {
+    setWeight(exercise.currentWeightKg);
+    setDifficulty(exercise.difficulty);
+  }, [exercise]);
 
   // Animate exercise completion
   const oldY = useRef<number>();
-
   useEffect(() => {
     const el = divRef.current;
     if (el && oldY.current) {
@@ -93,7 +88,7 @@ const ExerciseItem = (props: ExerciseItemProps) => {
           fontWeight: 300,
         }}
       >
-        {exercise.currentWeightKg}kg | {exercise.reps} reps | {exercise.series}x
+        {weight}kg | {exercise.reps} reps | {exercise.series}x
       </Typography>
 
       {expanded && (
@@ -105,7 +100,7 @@ const ExerciseItem = (props: ExerciseItemProps) => {
             <TextField
               label="Weight"
               variant="outlined"
-              defaultValue={exercise.currentWeightKg}
+              defaultValue={weight}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">kg</InputAdornment>
@@ -155,8 +150,8 @@ const ExerciseItem = (props: ExerciseItemProps) => {
               style={{ width: "100%", marginBottom: 8, marginTop: 24 }}
               color="secondary"
               onClick={() => {
-                if (difficulty && weight && reps) {
-                  complete(weight, reps, series, difficulty);
+                if (difficulty && weight) {
+                  complete(weight, difficulty);
                 }
               }}
               variant="contained"
