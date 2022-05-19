@@ -8,9 +8,10 @@ interface ExerciseListProps {
   currentSession: Session | null;
   dispatcher: Dispatch<SessionAction>;
   sessionNumber: number;
+  onEditExercise(exerciseNumber: number): any;
 }
 const ExerciseList = (props: ExerciseListProps) => {
-  const { currentSession, sessionNumber, dispatcher } = props;
+  const { currentSession, sessionNumber, dispatcher, onEditExercise } = props;
   const [expandedExercise, setExpandedExercise] = useState<number | null>(null);
 
   const exercisesView = currentSession?.exercises
@@ -57,14 +58,8 @@ const ExerciseList = (props: ExerciseListProps) => {
                 },
               });
             }}
-            delete={() => {
-              dispatcher({
-                type: SessionActionKind.DELETE_EXERCISE,
-                payload: {
-                  exerciseNumber: exercise.originalIndex,
-                  sessionNumber,
-                },
-              });
+            onEdit={() => {
+              onEditExercise(exercise.originalIndex);
             }}
           />
         );

@@ -16,7 +16,7 @@ import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import EditIcon from "@mui/icons-material/Edit";
 
 import { colors } from "../../../../theme";
 
@@ -26,7 +26,7 @@ interface ExerciseItemProps {
   expanded: boolean;
   expand(): any;
   complete(newWeight: number, difficulty: number): any;
-  delete(): any;
+  onEdit(): any;
 }
 
 const ExerciseItem = (props: ExerciseItemProps) => {
@@ -161,13 +161,12 @@ const ExerciseItem = (props: ExerciseItemProps) => {
           </div>
 
           <IconButton
-            color="error"
-            aria-label="Edit Session"
+            aria-label="Edit Exercise"
             component="span"
             style={{ position: "absolute", top: 8, right: 8 }}
-            onClick={props.delete}
+            onClick={props.onEdit}
           >
-            <DeleteOutlineIcon />
+            <EditIcon />
           </IconButton>
         </>
       )}

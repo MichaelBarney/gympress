@@ -6,7 +6,9 @@ import { SessionActionKind, sessionsReducer } from "./store/sessionReducer";
 import { ALPHABET } from "../../consts";
 import AddIcon from "@mui/icons-material/Add";
 
-import NewExerciseModal from "./components/NewExerciseModal";
+import ExerciseModal, {
+  EXERCISE_MODAL_STATE,
+} from "./components/ExerciseModal";
 import SessionModal, { SESSION_MODAL_STATE } from "./components/SessionModal";
 import ExerciseList from "./components/ExerciseList";
 import { colors } from "../../theme";
@@ -25,7 +27,10 @@ const Home = () => {
 
   const [isSharing, setIsSharing] = useState(false);
   const [shareSnackbar, setShareSnackbar] = useState(false);
-  const [exerciseModalOpen, setExerciseModalOpen] = useState<boolean>(false);
+  const [exerciseModalState, setExerciseModalState] =
+    useState<EXERCISE_MODAL_STATE>(EXERCISE_MODAL_STATE.CLOSED);
+  const [exerciseToEdit, setExerciseToEdit] = useState<number>();
+
   const [sessionModalState, setSessionModalState] =
     useState<SESSION_MODAL_STATE>(SESSION_MODAL_STATE.CLOSED);
 
@@ -129,6 +134,10 @@ const Home = () => {
             currentSession={currentSession}
             sessionNumber={sessionNumber}
             dispatcher={dispatchSessions}
+            onEditExercise={(exerciseNumber) => {
+              setExerciseToEdit(exerciseNumber);
+              setExerciseModalState(EXERCISE_MODAL_STATE.EDIT);
+            }}
           />
 
           <hr style={{ marginTop: 16, opacity: 0.25 }} />
@@ -136,7 +145,7 @@ const Home = () => {
           <StyledButton
             fullWidth
             onClick={() => {
-              setExerciseModalOpen(true);
+              setExerciseModalState(EXERCISE_MODAL_STATE.NEW);
             }}
             style={{ marginTop: 8, marginBottom: 8 }}
             variant="outlined"
@@ -197,15 +206,17 @@ const Home = () => {
         </StyledButton>
       )}
 
-      {exerciseModalOpen && (
-        <NewExerciseModal
+      {exerciseModalState != EXERCISE_MODAL_STATE.CLOSED && (
+        <ExerciseModal
           onClose={() => {
-            setExerciseModalOpen(false);
+            setExerciseModalState(EXERCISE_MODAL_STATE.CLOSED);
+            setExerciseToEdit(undefined);
           }}
-          open={exerciseModalOpen}
           dispatcher={dispatchSessions}
           currentSessionNumber={sessionNumber}
           sessions={sessions}
+          state={exerciseModalState}
+          exerciseToEdit={exerciseToEdit}
         />
       )}
 
@@ -226,6 +237,7 @@ const Home = () => {
           sessionNumber={sessionNumber}
         />
       )}
+
       {currentSession && isSharing && (
         <Share
           currentSession={currentSession}

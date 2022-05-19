@@ -4,6 +4,7 @@ export enum SessionActionKind {
   ADD_EXERCISE = "add-exercise",
   DELETE_EXERCISE = "delete-exercise",
   COMPLETE_EXERCISE = "complete-exercise",
+  EDIT_EXERCISE = "edit-exercise",
   ADD_SESSION = "add-session",
   EDIT_SESSION = "edit-session",
   CLEAR_SESSION = "clear-session",
@@ -119,6 +120,42 @@ export const sessionsReducer = (state: Session[], action: SessionAction) => {
         } else return session;
       });
       console.log("COMPLETED ", newState);
+      localStorage.setItem("sessions", JSON.stringify(newState));
+      return newState;
+    }
+
+    case SessionActionKind.EDIT_EXERCISE: {
+      const {
+        name,
+        currentWeightKg,
+        reps,
+        series,
+        sessionNumber,
+        exerciseToEdit,
+        description,
+      } = payload;
+
+      console.log("EDIT EXERCISE");
+      const newState: Session[] = state.map((session, sessionIndex) => {
+        if (sessionIndex === sessionNumber) {
+          return {
+            ...state[sessionIndex],
+            exercises: state[sessionIndex].exercises.map((exercise, index) => {
+              if (index === exerciseToEdit) {
+                return {
+                  ...exercise,
+                  currentWeightKg,
+                  name,
+                  reps,
+                  series,
+                  description,
+                };
+              } else return exercise;
+            }),
+          };
+        } else return session;
+      });
+      console.log("EDITED EXERCISE ", newState);
       localStorage.setItem("sessions", JSON.stringify(newState));
       return newState;
     }
