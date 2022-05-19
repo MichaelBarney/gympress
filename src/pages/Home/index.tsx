@@ -41,6 +41,7 @@ const Home = () => {
 
   useEffect(() => {
     setCurrentSession(sessions[sessionNumber]);
+    localStorage.setItem("currentSession", sessionNumber.toString());
   }, [sessionNumber, sessions]);
 
   return (
