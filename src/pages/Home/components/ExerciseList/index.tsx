@@ -41,7 +41,7 @@ const ExerciseList = (props: ExerciseListProps) => {
         return (
           <ExerciseItem
             exercise={exercise}
-            key={index}
+            key={exercise.name}
             viewOrder={index}
             expanded={expandedExercise == exercise.originalIndex}
             expand={() => {

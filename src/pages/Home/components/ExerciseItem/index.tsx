@@ -6,7 +6,7 @@ import {
   ToggleButton,
   IconButton,
 } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Exercise, ExerciseStatus } from "../../store/exercise";
 import { StyledExercise } from "./style";
 
@@ -42,7 +42,7 @@ const ExerciseItem = (props: ExerciseItemProps) => {
 
   // Animate exercise completion
   const oldY = useRef<number>();
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = divRef.current;
     if (el && oldY.current) {
       const newOffset = el.getBoundingClientRect().top;
