@@ -110,7 +110,7 @@ const ExerciseItem = (props: ExerciseItemProps) => {
               type="number"
               fullWidth
               onChange={(e) => {
-                setWeight(parseInt(e.target.value));
+                setWeight(Number(e.target.value));
               }}
             />
             <Typography
