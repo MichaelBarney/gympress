@@ -18,6 +18,8 @@ import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
 import EditIcon from "@mui/icons-material/Edit";
 
+import emotes from "../../../../assets/emotes";
+
 import { colors } from "../../../../theme";
 
 interface ExerciseItemProps {
@@ -128,20 +130,20 @@ const ExerciseItem = (props: ExerciseItemProps) => {
               fullWidth
               color="secondary"
             >
-              <ToggleButton value={1} style={{ padding: "4px 0px" }}>
-                1
+              <ToggleButton value={1} style={{ padding: "8px 0px" }}>
+                <img src={emotes.a} alt="Too Easy" style={{ height: "32px" }} />
               </ToggleButton>
-              <ToggleButton value={2} style={{ padding: "4px 0px" }}>
-                2
+              <ToggleButton value={2} style={{ padding: "8px 0px" }}>
+                <img src={emotes.b} alt="Too Easy" style={{ height: "32px" }} />
               </ToggleButton>
-              <ToggleButton value={3} style={{ padding: "4px 0px" }}>
-                3
+              <ToggleButton value={3} style={{ padding: "8x 0px" }}>
+                <img src={emotes.c} alt="Too Easy" style={{ height: "32px" }} />
               </ToggleButton>
-              <ToggleButton value={4} style={{ padding: "4px 0px" }}>
-                4
+              <ToggleButton value={4} style={{ padding: "8px 0px" }}>
+                <img src={emotes.d} alt="Too Easy" style={{ height: "32px" }} />
               </ToggleButton>
-              <ToggleButton value={5} style={{ padding: "4px 0px" }}>
-                5
+              <ToggleButton value={5} style={{ padding: "8px 0px" }}>
+                <img src={emotes.e} alt="Too Easy" style={{ height: "32px" }} />
               </ToggleButton>
             </ToggleButtonGroup>
 
