@@ -7,7 +7,7 @@ import {
   IconButton,
 } from "@mui/material";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Exercise, ExerciseStatus } from "../../store/exercise";
+import { Exercise, ExerciseStatus, Units } from "../../store/exercise";
 import { StyledExercise } from "./style";
 
 import { StyledButton } from "../../../../styles/StyledButton";
@@ -34,11 +34,11 @@ interface ExerciseItemProps {
 const ExerciseItem = (props: ExerciseItemProps) => {
   const divRef = useRef<HTMLDivElement>(null);
   const { exercise, expand, expanded, viewOrder, complete } = props;
-  const [weight, setWeight] = useState(exercise.currentWeightKg);
+  const [weight, setWeight] = useState(exercise.currentWeight);
   const [difficulty, setDifficulty] = useState(exercise.difficulty);
 
   useEffect(() => {
-    setWeight(exercise.currentWeightKg);
+    setWeight(exercise.currentWeight);
     setDifficulty(exercise.difficulty);
   }, [exercise]);
 
@@ -90,7 +90,8 @@ const ExerciseItem = (props: ExerciseItemProps) => {
           fontWeight: 300,
         }}
       >
-        {weight}kg | {exercise.reps} reps | {exercise.series}x
+        {weight} {Units[exercise.unitIndex ?? 0].symbol} | {exercise.reps} reps |{" "}
+        {exercise.series}x
       </Typography>
 
       {expanded && (
@@ -100,12 +101,14 @@ const ExerciseItem = (props: ExerciseItemProps) => {
           </Typography>
           <div style={{ marginTop: 16 }}>
             <TextField
-              label="Weight"
+              label={Units[exercise.unitIndex]?.name}
               variant="outlined"
               defaultValue={weight}
               InputProps={{
                 endAdornment: (
-                  <InputAdornment position="end">kg</InputAdornment>
+                  <InputAdornment position="end">
+                    {Units[exercise.unitIndex]?.symbol}
+                  </InputAdornment>
                 ),
               }}
               required

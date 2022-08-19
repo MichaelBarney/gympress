@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import { SessionAction, SessionActionKind } from "../../store/sessionReducer";
 import { ModalBox } from "../../../../styles/ModalBox";
 import { StyledButton } from "../../../../styles/StyledButton";
-import { ExerciseStatus, Session } from "../../store/exercise";
+import { ExerciseStatus, Session, Unit, Units } from "../../store/exercise";
 import { DeleteOutline } from "@mui/icons-material";
 
 export enum EXERCISE_MODAL_STATE {
@@ -58,7 +58,7 @@ const ExerciseModal = (props: ExerciseModalDTO) => {
     string | undefined
   >(exerciseToEditData?.description);
   const [exerciseWeight, setExerciseWeight] = useState<number | undefined>(
-    exerciseToEditData?.currentWeightKg
+    exerciseToEditData?.currentWeight
   );
   const [exerciseReps, setExerciseReps] = useState<number | undefined>(
     exerciseToEditData?.reps
@@ -66,6 +66,10 @@ const ExerciseModal = (props: ExerciseModalDTO) => {
   const [exerciseSeries, setExerciseSeries] = useState<number | undefined>(
     exerciseToEditData?.series
   );
+  const [exerciseUnitIndex, setExerciseUnitIndex] = useState<number>(
+    exerciseToEditData?.unitIndex ?? 0
+  );
+
   const [sessionNumber, setSessionNumber] =
     useState<number>(currentSessionNumber);
 
@@ -77,11 +81,12 @@ const ExerciseModal = (props: ExerciseModalDTO) => {
         type: SessionActionKind.ADD_EXERCISE,
         payload: {
           name: exerciseName,
-          currentWeightKg: exerciseWeight,
+          currentWeight: exerciseWeight,
           reps: exerciseReps,
           series: exerciseSeries,
           sessionNumber,
           description: exerciseDescription,
+          unitIndex: exerciseUnitIndex,
         },
       });
 
@@ -97,12 +102,13 @@ const ExerciseModal = (props: ExerciseModalDTO) => {
         type: SessionActionKind.EDIT_EXERCISE,
         payload: {
           name: exerciseName,
-          currentWeightKg: exerciseWeight,
+          currentWeight: exerciseWeight,
           reps: exerciseReps,
           series: exerciseSeries,
           sessionNumber,
           description: exerciseDescription,
           exerciseToEdit,
+          unitIndex: exerciseUnitIndex,
         },
       });
 
@@ -169,27 +175,43 @@ const ExerciseModal = (props: ExerciseModalDTO) => {
             }}
             style={{ marginBottom: 16 }}
           />
-          <TextField
-            label="Weight"
-            variant="outlined"
-            fullWidth
-            defaultValue={exerciseToEditData?.currentWeightKg}
-            InputProps={{
-              endAdornment: <InputAdornment position="end">kg</InputAdornment>,
-            }}
-            required
-            onChange={(e) => {
-              setExerciseWeight(parseFloat(e.target.value));
-            }}
-            type="number"
-            style={{ marginBottom: 16 }}
-          />
           <div
             style={{
               display: "flex",
               flexDirection: "row",
               justifyContent: "space-between",
               columnGap: 8,
+            }}
+          >
+            <TextField
+              label={Units[exerciseUnitIndex].name}
+              variant="outlined"
+              defaultValue={exerciseToEditData?.currentWeight}
+              required
+              onChange={(e) => {
+                setExerciseWeight(parseFloat(e.target.value));
+              }}
+              type="number"
+            />
+            <Select
+              id="unit-selector"
+              defaultValue={exerciseToEditData?.unitIndex ?? 0}
+              onChange={(e) => {
+                setExerciseUnitIndex(e.target.value as number);
+              }}
+            >
+              {Units.map((unit, index) => {
+                return <MenuItem value={index}>{unit.symbol}</MenuItem>;
+              })}
+            </Select>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              columnGap: 8,
+              marginTop: 16,
             }}
           >
             <TextField

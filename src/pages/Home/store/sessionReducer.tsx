@@ -22,20 +22,22 @@ export const sessionsReducer = (state: Session[], action: SessionAction) => {
     case SessionActionKind.ADD_EXERCISE: {
       const {
         name,
-        currentWeightKg,
+        currentWeight,
         reps,
         series,
         sessionNumber,
         description,
+        unitIndex,
       } = payload;
 
       const exerciseToAdd = {
         status: ExerciseStatus.INCOMPLETE,
         name,
-        currentWeightKg,
+        currentWeight,
         reps,
         series,
         description,
+        unitIndex,
       };
       const newState: Session[] = state.map((session, index) => {
         if (index === sessionNumber) {
@@ -105,12 +107,12 @@ export const sessionsReducer = (state: Session[], action: SessionAction) => {
               if (index === exerciseNumber) {
                 return {
                   ...exercise,
-                  currentWeightKg: newWeight,
+                  currentWeight: newWeight,
                   difficulty: newDifficulty,
                   status:
-                    newWeight > exercise.currentWeightKg
+                    newWeight > exercise.currentWeight
                       ? ExerciseStatus.INCREASED
-                      : newWeight < exercise.currentWeightKg
+                      : newWeight < exercise.currentWeight
                       ? ExerciseStatus.DECREASED
                       : ExerciseStatus.MAINTAINED,
                 };
@@ -127,12 +129,13 @@ export const sessionsReducer = (state: Session[], action: SessionAction) => {
     case SessionActionKind.EDIT_EXERCISE: {
       const {
         name,
-        currentWeightKg,
+        currentWeight,
         reps,
         series,
         sessionNumber,
         exerciseToEdit,
         description,
+        unitIndex,
       } = payload;
 
       console.log("EDIT EXERCISE");
@@ -144,11 +147,12 @@ export const sessionsReducer = (state: Session[], action: SessionAction) => {
               if (index === exerciseToEdit) {
                 return {
                   ...exercise,
-                  currentWeightKg,
+                  currentWeight,
                   name,
                   reps,
                   series,
                   description,
+                  unitIndex,
                 };
               } else return exercise;
             }),
